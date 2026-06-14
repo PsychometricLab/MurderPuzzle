@@ -49,7 +49,7 @@ html{font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body{font-family:var(--body);color:var(--text);background:var(--bg);min-height:100vh;min-height:100svh;line-height:1.6;overflow-x:hidden;overflow-y:auto;overscroll-behavior:none;-webkit-overflow-scrolling:touch;touch-action:manipulation}
 #app{overflow-x:hidden;width:100%}
 body.on-results{overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch-action:manipulation}
-.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;background:var(--bg);position:relative;overflow:hidden}
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem 2.5rem;background:var(--bg);position:relative;overflow-x:hidden;overflow-y:visible}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(74,91,203,.18) 0%,transparent 65%),radial-gradient(ellipse 60% 50% at 85% 100%,rgba(74,91,203,.1) 0%,transparent 60%);pointer-events:none}
 .hero::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.018) 39px,rgba(255,255,255,.018) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.018) 39px,rgba(255,255,255,.018) 40px);pointer-events:none}
 .hero-rule{width:40px;height:2px;background:linear-gradient(90deg,transparent,rgba(146,158,230,.6),transparent);margin:0 auto 1.75rem;border-radius:2px}
@@ -616,7 +616,7 @@ body{background:var(--bg);color:var(--text)}
 </style>
 </head>
 <body>
-<div id="app"><div class="hero"><div class="hero-eyebrow">A Research Study</div><div class="hero-rule"></div><h1 class="hero-puzzle">A Murder Puzzle</h1><div class="hero-divider"></div><div class="hero-card"><p class="hero-sub">This study examines the link between personality and how people respond to moral dilemmas.</p><p class="hero-sub" style="margin-top:0.6rem;font-size:.95rem">You’ll be presented with 3 moral dilemmas. After each dilemma you will take a short, validated personality scale. There are no right or wrong answers — please just answer honestly.</p><p class="hero-sub" style="margin-top:0.7rem"><strong>All responses are anonymous.</strong></p><p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question. On mobile, press the button below to begin.</p></div><div class="hero-meta"><div class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect></svg>3 dilemmas</div><div class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>~9 minutes</div><div class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Anonymous</div></div><button class="btn-hero" id="btnStart">Begin</button></div></div>
+<div id="app"><div class="hero"><div class="hero-eyebrow">A Research Study</div><div class="hero-rule"></div><h1 class="hero-puzzle">A Murder Puzzle</h1><div class="hero-divider"></div><div class="hero-card"><p class="hero-sub">This study examines the link between personality and how people respond to moral dilemmas.</p><p class="hero-sub" style="margin-top:0.6rem;font-size:.95rem">You’ll be presented with 3 moral dilemmas. After each dilemma you will take a short, validated personality scale. There are no right or wrong answers — please just answer honestly.</p><p class="hero-sub" style="margin-top:0.7rem"><strong>All responses are anonymous.</strong></p><p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question. On mobile, press the button below to begin. You can also swipe left or right to move forward and back.</p></div><button class="btn-hero" id="btnStart">Begin</button></div></div>
 <div class="submitting-overlay" id="submitting"><div class="spinner"></div><div class="spinner-text" id="spinnerText"></div></div>
 <script>
 const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycby5tgYEk0OcU56vaffq2FafwwElPlnYwGAWfUHCdQ6OC5iGkVOfV97d84o3YKMJHsXW/exec';
@@ -710,7 +710,9 @@ function render(){
   if(s.type==='pps')setTimeout(unifyStmtWrap,0);
   if(s.type==='thankyou')setTimeout(function(){window.location.href=REDDIT_URL;},1000);
   window.scrollTo(0,0);
-  setTimeout(function(){window.scrollTo(0,0);},300);
+  // Don't re-snap the welcome screen to top: on small phones the user may need
+  // to scroll to reach the Begin button, and the delayed reset would fight them.
+  if(s.type!=='welcome')setTimeout(function(){window.scrollTo(0,0);},300);
 }
 
 function renderWelcome(){
@@ -723,12 +725,7 @@ function renderWelcome(){
     +'<p class="hero-sub">This study examines the link between personality and how people respond to moral dilemmas.</p>'
     +'<p class="hero-sub" style="margin-top:0.6rem;font-size:.95rem">You\u2019ll be presented with 3 moral dilemmas. After each dilemma you will take a short, validated personality scale. There are no right or wrong answers \u2014 please just answer honestly.</p>'
     +'<p class="hero-sub" style="margin-top:0.7rem"><strong>All responses are anonymous.</strong></p>'
-    +'<p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question. On mobile, press the button below to begin.</p>'
-    +'</div>'
-    +'<div class="hero-meta">'
-    +'<div class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>3 dilemmas</div>'
-    +'<div class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~9 minutes</div>'
-    +'<div class="hero-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Anonymous</div>'
+    +'<p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question. On mobile, press the button below to begin. You can also swipe left or right to move forward and back.</p>'
     +'</div>'
     +'<button class="btn-hero" id="btnStart">Begin</button>'
     +'</div>';
@@ -982,6 +979,31 @@ function attachListeners(){
     opt.addEventListener('touchend',function(){try{if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();}catch(e){}},{passive:true});
   });
 }
+
+// ---- Swipe navigation (mobile): swipe left = forward, swipe right = back ----
+// Forward is gated by goNext(), which blocks (and shows an error) if the
+// current question has not been answered. Back always works.
+(function(){
+  var sx=0,sy=0,st=0,tracking=false;
+  var SWIPE_TYPES={dilemma:1,likert:1,pps:1,sins:1};
+  function canSwipe(){var s=SCREENS[state.currentPage];return !!(s&&SWIPE_TYPES[s.type]);}
+  document.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1){tracking=false;return;}
+    var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();tracking=true;
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!tracking)return;tracking=false;
+    if(!canSwipe())return;
+    var t=e.changedTouches&&e.changedTouches[0];if(!t)return;
+    var dx=t.clientX-sx,dy=t.clientY-sy,dt=Date.now()-st;
+    var adx=Math.abs(dx),ady=Math.abs(dy);
+    if(adx<60)return;            // not far enough to count as a swipe
+    if(adx<ady*1.5)return;       // too vertical — likely a scroll, ignore
+    if(dt>800)return;            // too slow to be an intentional swipe
+    if(dx<0)goNext();            // swipe left  -> forward (gated by answer)
+    else goBack();               // swipe right -> back
+  },{passive:true});
+})();
 
 // ---- Submission ----
 function submitToSheet(payload,callback){
