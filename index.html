@@ -49,7 +49,7 @@ html{font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body{font-family:var(--body);color:var(--text);background:var(--bg);min-height:100vh;min-height:100svh;line-height:1.6;overflow-x:hidden;overflow-y:auto;overscroll-behavior:none;-webkit-overflow-scrolling:touch;touch-action:manipulation}
 #app{overflow-x:hidden;width:100%}
 body.on-results{overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch-action:manipulation}
-.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem 2.5rem;background:var(--bg);position:relative;overflow-x:hidden;overflow-y:visible}
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem 16vh;background:var(--bg);position:relative;overflow-x:hidden;overflow-y:visible}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(74,91,203,.18) 0%,transparent 65%),radial-gradient(ellipse 60% 50% at 85% 100%,rgba(74,91,203,.1) 0%,transparent 60%);pointer-events:none}
 .hero::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.018) 39px,rgba(255,255,255,.018) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.018) 39px,rgba(255,255,255,.018) 40px);pointer-events:none}
 .hero-rule{width:40px;height:2px;background:linear-gradient(90deg,transparent,rgba(146,158,230,.6),transparent);margin:0 auto 1.75rem;border-radius:2px}
@@ -69,7 +69,7 @@ body.on-results{overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch
 .btn-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.1) 0%,transparent 60%);border-radius:inherit}
 .btn-hero:hover{background:linear-gradient(135deg,#7063DC 0%,#5B50CC 100%);box-shadow:0 0 0 1px rgba(112,99,220,.5),0 6px 28px rgba(74,91,203,.55),0 1px 3px rgba(0,0,0,.4);transform:translateY(-1px)}
 .btn-hero:active{transform:translateY(0)}
-.explainer{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;background:var(--bg);position:relative}
+.explainer{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem 14vh;background:var(--bg);position:relative}
 .explainer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(100,86,212,.12) 0%,transparent 60%);pointer-events:none}
 .explainer-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem 2rem;max-width:540px;width:100%;box-shadow:var(--shadow);animation:fadeIn .5s ease;position:relative;z-index:1}
 .btn-explainer-back{display:block;margin:1.25rem auto 0;background:transparent;border:none;color:var(--text-light);font-family:var(--body);font-size:.85rem;cursor:pointer;padding:.4rem .8rem;opacity:.7;transition:opacity .15s ease;position:relative;z-index:1}
@@ -93,7 +93,7 @@ body.on-results{overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch
 .tri-label-r{text-align:right;color:var(--primary);font-weight:600}
 .explainer-note{font-size:.88rem;color:var(--text-muted);line-height:1.6;margin:0 0 1.25rem}
 .explainer-note strong{color:var(--text);font-weight:600}
-.survey-shell{max-width:920px;margin:0 auto;padding:0 1.5rem 0;height:100vh;height:100svh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.survey-shell{max-width:920px;margin:0 auto;padding:0 1.5rem 14vh;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;background:var(--bg)}
 .progress-container{padding:1.25rem 0 .75rem;flex-shrink:0;border-bottom:1px solid var(--border-light)}
 .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
 .progress-title{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--text);letter-spacing:-.02em;text-transform:none}
@@ -213,7 +213,7 @@ body.on-results{overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch
 .likert .scale-btn:focus-visible{outline:none}
 .likert .scale-btn:focus-visible .scale-lbl{color:#7CE3A6}
 
-.demo-screen{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;background:var(--bg);position:relative}
+.demo-screen{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem 14vh;background:var(--bg);position:relative}
 .demo-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(100,86,212,.1) 0%,transparent 60%);pointer-events:none}
 .demo-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem 2rem;max-width:500px;width:100%;box-shadow:var(--shadow);animation:fadeIn .5s ease;position:relative;z-index:1}
 .demo-card h2{font-family:var(--heading);font-size:1.6rem;font-weight:700;margin-bottom:.4rem;text-align:center;color:var(--text)}
@@ -357,9 +357,6 @@ body.on-results{overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch
   justify-content:center;
   align-items:center;
   padding:1.5rem 0;
-  min-height:0;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
 }
 .item-area.first-load{opacity:0;animation:fadeIn .5s ease .25s forwards}
 .item-area.slide-fwd{animation:slideInRight .28s ease}
@@ -461,8 +458,8 @@ body.on-results{overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch
 <style>
 /* ===== Added: dilemma, thank-you, yes/no, welcome-title screens ===== */
 .hero h1.hero-puzzle{white-space:normal;font-size:clamp(1.7rem,6vw,2.4rem)}
-.dilemma-screen{max-width:760px;margin:0 auto;padding:0 1.5rem 0;height:100vh;height:100svh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
-.dilemma-body{flex:1;padding:1.5rem 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.dilemma-screen{max-width:760px;margin:0 auto;padding:0 1.5rem 16vh;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;background:var(--bg)}
+.dilemma-body{flex:1;padding:1.5rem 0 0}
 .dilemma-title{font-family:var(--heading);font-size:1.7rem;font-weight:700;color:var(--text);text-align:center;margin:.5rem 0 1.4rem;text-wrap:balance;letter-spacing:-.02em}
 .dilemma-scenario{font-size:1.02rem;line-height:1.75;color:var(--text);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;margin-bottom:1.6rem;box-shadow:var(--shadow-sm)}
 .dilemma-prompt{font-size:1.02rem;font-weight:600;color:var(--text);text-align:center;margin-bottom:.35rem}
@@ -616,7 +613,7 @@ body{background:var(--bg);color:var(--text)}
 </style>
 </head>
 <body>
-<div id="app"><div class="hero"><div class="hero-eyebrow">A Research Study</div><div class="hero-rule"></div><h1 class="hero-puzzle">A Murder Puzzle</h1><div class="hero-divider"></div><div class="hero-card"><p class="hero-sub">This study examines the link between personality and how people respond to moral dilemmas.</p><p class="hero-sub" style="margin-top:0.6rem;font-size:.95rem">You’ll be presented with 3 moral dilemmas. After each dilemma you will take a short, validated personality scale. There are no right or wrong answers — please just answer honestly.</p><p class="hero-sub" style="margin-top:0.7rem"><strong>All responses are anonymous.</strong></p><p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question. On mobile, press the button below to begin. You can also swipe left or right to move forward and back.</p></div><button class="btn-hero" id="btnStart">Begin</button></div></div>
+<div id="app"><div class="hero"><div class="hero-eyebrow">A Research Study</div><div class="hero-rule"></div><h1 class="hero-puzzle">A Murder Puzzle</h1><div class="hero-divider"></div><div class="hero-card"><p class="hero-sub">This study examines the link between personality and how people respond to moral dilemmas.</p><p class="hero-sub" style="margin-top:0.6rem;font-size:.95rem">You’ll be presented with 3 moral dilemmas. After each dilemma you will take a short, validated personality scale. There are no right or wrong answers — please just answer honestly.</p><p class="hero-sub" style="margin-top:0.7rem"><strong>All responses are anonymous.</strong></p><p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question.</p></div><button class="btn-hero" id="btnStart">Begin</button></div></div>
 <div class="submitting-overlay" id="submitting"><div class="spinner"></div><div class="spinner-text" id="spinnerText"></div></div>
 <script>
 const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycby5tgYEk0OcU56vaffq2FafwwElPlnYwGAWfUHCdQ6OC5iGkVOfV97d84o3YKMJHsXW/exec';
@@ -709,10 +706,9 @@ function render(){
   app.innerHTML=html;attachListeners();
   if(s.type==='pps')setTimeout(unifyStmtWrap,0);
   if(s.type==='thankyou')setTimeout(function(){window.location.href=REDDIT_URL;},1000);
+  // Start each new screen at the top, but never re-snap afterwards — a delayed
+  // reset would fight the user while they scroll toward the answers/button.
   window.scrollTo(0,0);
-  // Don't re-snap the welcome screen to top: on small phones the user may need
-  // to scroll to reach the Begin button, and the delayed reset would fight them.
-  if(s.type!=='welcome')setTimeout(function(){window.scrollTo(0,0);},300);
 }
 
 function renderWelcome(){
@@ -725,7 +721,7 @@ function renderWelcome(){
     +'<p class="hero-sub">This study examines the link between personality and how people respond to moral dilemmas.</p>'
     +'<p class="hero-sub" style="margin-top:0.6rem;font-size:.95rem">You\u2019ll be presented with 3 moral dilemmas. After each dilemma you will take a short, validated personality scale. There are no right or wrong answers \u2014 please just answer honestly.</p>'
     +'<p class="hero-sub" style="margin-top:0.7rem"><strong>All responses are anonymous.</strong></p>'
-    +'<p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question. On mobile, press the button below to begin. You can also swipe left or right to move forward and back.</p>'
+    +'<p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question.</p>'
     +'</div>'
     +'<button class="btn-hero" id="btnStart">Begin</button>'
     +'</div>';
