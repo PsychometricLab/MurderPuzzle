@@ -231,6 +231,8 @@ body.on-results{}
 .demo-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.1) 0%,transparent 60%);border-radius:inherit}
 .demo-submit:hover{background:linear-gradient(135deg,#7063DC 0%,#5B50CC 100%);box-shadow:0 0 0 1px rgba(112,99,220,.5),0 6px 28px rgba(74,91,203,.5);transform:translateY(-1px)}
 .demo-submit:active{transform:translateY(0)}
+.demo-back{display:block;margin:.85rem auto 0;padding:.5rem 1.25rem;background:none;border:none;font-family:var(--body);font-size:.92rem;font-weight:500;color:var(--text-muted);cursor:pointer;border-radius:100px}
+.demo-back:hover{color:var(--text);background:rgba(0,0,0,.04)}
 @media(max-width:640px){
   .demo-card{padding:1.75rem 1.25rem}
   .demo-card h2{font-size:1.35rem}
@@ -477,26 +479,12 @@ body.on-results{}
 /* --- Float-top header (keeps statements/question centered; instructions & error grow upward) --- */
 .item-float-top{position:static;display:flex;flex-direction:column;align-items:center;width:100%;padding-bottom:.55rem}
 .item-anchor{width:100%;display:flex;flex-direction:column;align-items:center}
+.stmt-anchor{position:relative;width:100%}
+.pps-instr-pin{position:absolute;left:0;right:0;bottom:100%}
+.pps-instr-pin.in-flow{position:static}
 .pps-instruction{text-align:center;max-width:600px;margin:0 auto 1.15rem;font-size:1.05rem;font-weight:500;color:var(--text);line-height:1.55;text-wrap:balance}
 .item-note{font-size:1rem;color:var(--text);font-style:italic;line-height:1.5;text-align:center;max-width:560px;margin:0 auto 1.1rem;padding:.6rem .95rem;background:rgba(255,255,255,.045);border:1px solid var(--border-light);border-radius:10px;text-wrap:balance}
 @media(max-width:640px){.pps-instruction{font-size:.98rem}}
-/* --- SINS (single secret item, 7-point horizontal) --- */
-.sins-inner{max-width:640px;text-align:center}
-.sins-title{font-family:var(--heading);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:.2rem;letter-spacing:-.02em;line-height:1.25}
-.sins-attrib{font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem}
-.sins-prompt{font-size:1.05rem;color:var(--text);margin-bottom:.55rem}
-.sins-statement{font-family:var(--heading);font-size:1.6rem;font-weight:700;color:var(--text);margin-bottom:.9rem;letter-spacing:-.01em}
-.sins-note{font-size:.9rem;color:var(--text-muted);margin-bottom:1.6rem;line-height:1.5}
-.sins-row{display:flex;gap:.5rem;justify-content:center;align-items:stretch;max-width:560px;margin:0 auto;width:100%}
-.sins-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.35rem;padding:.7rem .25rem;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--bg-card);cursor:pointer;transition:border-color .15s,background .15s,color .15s;-webkit-tap-highlight-color:transparent}
-.sins-num{font-weight:700;font-size:1.2rem;color:var(--text);transition:color .15s}
-.sins-end{font-size:.8rem;font-weight:500;color:#D7DBE5;line-height:1.25;transition:color .15s}
-@media(hover:hover){.sins-btn:hover{border-color:rgba(124,227,166,.45)}.sins-btn:hover .sins-num,.sins-btn:hover .sins-end{color:#7CE3A6}}
-.sins-btn.selected{border-color:rgba(224,184,96,.6);background:rgba(224,184,96,.08)}
-.sins-btn.selected .sins-num{color:#E8C870}
-.sins-btn.selected .sins-end{color:#C8A850}
-.sins-btn:focus-visible{outline:none;border-color:rgba(124,227,166,.5)}
-@media(max-width:560px){.sins-statement{font-size:1.32rem}.sins-row{gap:.3rem}.sins-num{font-size:1.05rem}.sins-end{font-size:.7rem}}
 </style>
 
 <style>
@@ -551,15 +539,6 @@ body{background:var(--bg);color:var(--text)}
 /* dilemma */
 .dilemma-scenario{background:#FFFFFF;border:1px solid var(--border);color:var(--text);box-shadow:0 2px 12px rgba(20,25,40,.05)}
 
-/* SINS */
-.sins-btn{background:#FFFFFF;border:1.5px solid var(--border)}
-.sins-num{color:#1C2024}
-.sins-end{color:#5A6270}
-@media(hover:hover){.sins-btn:hover{border-color:rgba(83,96,224,.45)}.sins-btn:hover .sins-num,.sins-btn:hover .sins-end{color:var(--primary-dark)}}
-.sins-btn.selected{border-color:var(--primary);background:rgba(83,96,224,.09)}
-.sins-btn.selected .sins-num{color:var(--primary-dark)}
-.sins-btn.selected .sins-end{color:var(--primary-dark)}
-.sins-btn:focus-visible{border-color:rgba(83,96,224,.5)}
 
 /* per-item note callout */
 .item-note{background:#EEF0F6;border:1px solid var(--border);color:#2A2F37}
@@ -609,24 +588,33 @@ body{background:var(--bg);color:var(--text)}
   .survey-shell{padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0px))}
   .demo-screen,.hero,.explainer,.thankyou-screen{padding-bottom:calc(2rem + env(safe-area-inset-bottom,0px))}
 }
+/* NPI buttons + instructions page */
+.npi-wrap{max-width:520px}
+.npi-wrap .scale-btn{padding:.9rem 1.25rem;text-align:center}
+.npi-wrap .scale-lbl{font-size:1rem;line-height:1.45;color:#2A2F37}
+.instr-plain{max-width:600px;width:100%;margin:0 auto}
+.instr-text{font-size:1.05rem;font-weight:500;line-height:1.55;color:var(--text);text-align:center;margin-bottom:.9rem}
+.instr-list{font-size:1.05rem;font-weight:500;line-height:1.55;color:var(--text);text-align:center;list-style-position:inside;padding-left:0}
+.instr-list li{margin-bottom:.6rem}
+@media(max-width:640px){.instr-text,.instr-list{font-size:.98rem}.npi-wrap .scale-lbl{font-size:.95rem}}
 </style>
 </head>
 <body>
 <div id="app"><div class="hero"><div class="hero-eyebrow">A Research Study</div><div class="hero-rule"></div><h1 class="hero-puzzle">A Murder Puzzle</h1><div class="hero-divider"></div><div class="hero-card"><p class="hero-sub">This study examines the link between personality and how people respond to moral dilemmas.</p><p class="hero-sub" style="margin-top:0.6rem;font-size:.95rem">You’ll be presented with 3 moral dilemmas. After each dilemma you will take a short, validated personality scale. There are no right or wrong answers — please just answer honestly.</p><p class="hero-sub" style="margin-top:0.7rem"><strong>All responses are anonymous.</strong></p><p class="hero-sub" style="margin-top:0.5rem;font-size:.85rem;opacity:.85">If on desktop, you can press <strong>Enter</strong> to move to the next question.</p></div><button class="btn-hero" id="btnStart">Begin</button></div></div>
 <div class="submitting-overlay" id="submitting"><div class="spinner"></div><div class="spinner-text" id="spinnerText"></div></div>
 <script>
-const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbytGBo0ylgeYWS-SIMAfSWZJD06ILSG3LL_bC_OzkCg_gP9UCA7zBpWlngXQ_0UHFu0FA/exec';
-// Each item has 5 first-person statements in the user's preferred display order.
-// Each statement is {v: score 0-4, t: text}. The displayed order is preserved
-// exactly — some items show "complete" first, others show "no extent" first.
-// Scoring uses .v, never the display index.
-var S1_ITEMS=[{"id": "PPSInterpersonal8manipulationnaturally", "factor": "INT", "statements": [{"v": 0, "t": "Manipulation does not come naturally to me."}, {"v": 1, "t": "Manipulation comes slightly naturally to me."}, {"v": 2, "t": "Manipulation comes moderately naturally to me."}, {"v": 3, "t": "Manipulation comes considerably naturally to me."}, {"v": 4, "t": "Manipulation comes completely naturally to me."}], "note": null, "displayNum": 0}, {"id": "PPSAffective11coldunemotional", "factor": "AFF", "statements": [{"v": 0, "t": "I am not a cold and unemotional person."}, {"v": 1, "t": "I am a slightly cold and unemotional person."}, {"v": 2, "t": "I am a moderately cold and unemotional person."}, {"v": 3, "t": "I am a considerably cold and unemotional person."}, {"v": 4, "t": "I am a completely cold and unemotional person."}], "note": null, "displayNum": 1}, {"id": "PPSLifestyle1disregardconsequences", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t disregard possible consequences."}, {"v": 1, "t": "I slightly disregard possible consequences."}, {"v": 2, "t": "I moderately disregard possible consequences."}, {"v": 3, "t": "I considerably disregard possible consequences."}, {"v": 4, "t": "I completely disregard possible consequences."}], "note": null, "displayNum": 2}, {"id": "PPSAggression2threatenpeople", "factor": "ANT", "statements": [{"v": 0, "t": "I have no tendency to threaten people when they cross me."}, {"v": 1, "t": "I have a slight tendency to threaten people when they cross me."}, {"v": 2, "t": "I have a moderate tendency to threaten people when they cross me."}, {"v": 3, "t": "I have a considerable tendency to threaten people when they cross me."}, {"v": 4, "t": "I have a complete tendency to threaten people when they cross me."}], "note": null, "displayNum": 3}, {"id": "PPSInterpersonal2getliketrust", "factor": "INT", "statements": [{"v": 0, "t": "I cannot get people to like me and trust me when they shouldn’t."}, {"v": 1, "t": "To a slight extent, I can get people to like me and trust me when they shouldn’t."}, {"v": 2, "t": "To a moderate extent, I can get people to like me and trust me when they shouldn’t."}, {"v": 3, "t": "To a considerable extent, I can get people to like me and trust me when they shouldn’t."}, {"v": 4, "t": "To a complete extent, I can get people to like me and trust me when they shouldn’t."}], "note": null, "displayNum": 4}, {"id": "PPSLifestyle4disregardtasks", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t disregard tasks I’m expected to take care of."}, {"v": 1, "t": "I slightly disregard tasks I’m expected to take care of."}, {"v": 2, "t": "I moderately disregard tasks I’m expected to take care of."}, {"v": 3, "t": "I considerably disregard tasks I’m expected to take care of."}, {"v": 4, "t": "I completely disregard tasks I’m expected to take care of."}], "note": null, "displayNum": 5}, {"id": "PPSAffective8unaffectedfriendpain", "factor": "AFF", "statements": [{"v": 0, "t": "I don’t feel unaffected by a friend’s emotional pain."}, {"v": 1, "t": "I feel slightly unaffected by a friend’s emotional pain."}, {"v": 2, "t": "I feel moderately unaffected by a friend’s emotional pain."}, {"v": 3, "t": "I feel considerably unaffected by a friend’s emotional pain."}, {"v": 4, "t": "I feel completely unaffected by a friend’s emotional pain."}], "note": null, "displayNum": 6}, {"id": "PPSAggression5blowupquick", "factor": "ANT", "statements": [{"v": 0, "t": "To no extent do I “blow up” in anger before cooling down just as fast."}, {"v": 1, "t": "To a slight extent, I “blow up” in anger before cooling down just as fast."}, {"v": 2, "t": "To a moderate extent, I “blow up” in anger before cooling down just as fast."}, {"v": 3, "t": "To a considerable extent, I “blow up” in anger before cooling down just as fast."}, {"v": 4, "t": "To a complete extent, I “blow up” in anger before cooling down just as fast."}], "note": null, "displayNum": 7}, {"id": "PPSInterpersonal6charmonandoff", "factor": "INT", "statements": [{"v": 0, "t": "I can’t turn my charm on and off like a tap."}, {"v": 1, "t": "To a slight extent, I can turn my charm on and off like a tap."}, {"v": 2, "t": "To a moderate extent, I can turn my charm on and off like a tap."}, {"v": 3, "t": "To a considerable extent, I can turn my charm on and off like a tap."}, {"v": 4, "t": "To a complete extent, I can turn my charm on and off like a tap."}], "note": null, "displayNum": 8}, {"id": "PPSAffective7shallowfeelings", "factor": "AFF", "statements": [{"v": 0, "t": "I don’t have shallow feelings or lack emotional depth."}, {"v": 1, "t": "To a slight extent, I have shallow feelings and lack emotional depth."}, {"v": 2, "t": "To a moderate extent, I have shallow feelings and lack emotional depth."}, {"v": 3, "t": "To a considerable extent, I have shallow feelings and lack emotional depth."}, {"v": 4, "t": "To a complete extent, I have shallow feelings and lack emotional depth."}], "note": null, "displayNum": 9}, {"id": "PPSLifestyle8irresponsibly", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t behave irresponsibly."}, {"v": 1, "t": "I behave slightly irresponsibly."}, {"v": 2, "t": "I behave moderately irresponsibly."}, {"v": 3, "t": "I behave considerably irresponsibly."}, {"v": 4, "t": "I behave completely irresponsibly."}], "note": null, "displayNum": 10}, {"id": "PPSAggression6slaphorhit", "factor": "ANT", "statements": [{"v": 0, "t": "I am not at all likely to slap or hit someone if they provoke me."}, {"v": 1, "t": "I am slightly likely to slap or hit someone if they provoke me."}, {"v": 2, "t": "I am moderately likely to slap or hit someone if they provoke me."}, {"v": 3, "t": "I am considerably likely to slap or hit someone if they provoke me."}, {"v": 4, "t": "I am completely likely to slap or hit someone if they provoke me."}], "note": null, "displayNum": 11}, {"id": "PPSInterpersonal5falsepersona", "factor": "INT", "statements": [{"v": 0, "t": "I cannot adopt a false persona to con others."}, {"v": 1, "t": "I can adopt a slightly false persona to con others."}, {"v": 2, "t": "I can adopt a moderately false persona to con others."}, {"v": 3, "t": "I can adopt a considerably false persona to con others."}, {"v": 4, "t": "I can adopt a completely false persona to con others."}], "note": null, "displayNum": 12}, {"id": "PPSLifestyle9immediatepleasures", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t chase immediate pleasures at the expense of long-term stability."}, {"v": 1, "t": "I chase immediate pleasures to a slight extent, even at the expense of long-term stability."}, {"v": 2, "t": "I chase immediate pleasures to a moderate extent, even at the expense of long-term stability."}, {"v": 3, "t": "I chase immediate pleasures to a considerable extent, even at the expense of long-term stability."}, {"v": 4, "t": "I chase immediate pleasures to a complete extent, even at the expense of long-term stability."}], "note": null, "displayNum": 13}, {"id": "PPSAffective5lackempathy", "factor": "AFF", "statements": [{"v": 0, "t": "I have no lack of empathy."}, {"v": 1, "t": "I have a slight lack of empathy."}, {"v": 2, "t": "I have a moderate lack of empathy."}, {"v": 3, "t": "I have a considerable lack of empathy."}, {"v": 4, "t": "I have a complete lack of empathy."}], "note": null, "displayNum": 14}, {"id": "PPSInterpersonal9talkmyway", "factor": "INT", "statements": [{"v": 0, "t": "I can’t talk my way past almost any person."}, {"v": 1, "t": "To a slight extent, I can talk my way past almost any person."}, {"v": 2, "t": "To a moderate extent, I can talk my way past almost any person."}, {"v": 3, "t": "To a considerable extent, I can talk my way past almost any person."}, {"v": 4, "t": "To a complete extent, I can talk my way past almost any person."}], "note": null, "displayNum": 15}, {"id": "PPSAggression7verbalabusescream", "factor": "ANT", "statements": [{"v": 0, "t": "I have not verbally abused or screamed at others in anger."}, {"v": 1, "t": "To a slight extent, I have verbally abused or screamed at others in anger."}, {"v": 2, "t": "To a moderate extent, I have verbally abused or screamed at others in anger."}, {"v": 3, "t": "To a considerable extent, I have verbally abused or screamed at others in anger."}, {"v": 4, "t": "To a complete extent, I have verbally abused or screamed at others in anger."}], "note": null, "displayNum": 16}, {"id": "PPSAffective12personalresponsibility", "factor": "AFF", "statements": [{"v": 0, "t": "I feel personally responsible if my actions have hurt others."}, {"v": 1, "t": "I feel a slight lack of personal responsibility if my actions have hurt others."}, {"v": 2, "t": "I feel a moderate lack of personal responsibility if my actions have hurt others."}, {"v": 3, "t": "I feel a considerable lack of personal responsibility if my actions have hurt others."}, {"v": 4, "t": "I feel a complete lack of personal responsibility if my actions have hurt others."}], "note": null, "displayNum": 17}, {"id": "PPSInterpersonal1bullshitartist", "factor": "INT", "statements": [{"v": 0, "t": "I’m not a good bullshit artist."}, {"v": 1, "t": "I’m a slightly good bullshit artist."}, {"v": 2, "t": "I’m a moderately good bullshit artist."}, {"v": 3, "t": "I’m a considerably good bullshit artist."}, {"v": 4, "t": "I’m an extremely good bullshit artist."}], "note": null, "displayNum": 18}, {"id": "PPSLifestyle16NEWunreliable", "factor": "LIF", "statements": [{"v": 0, "t": "I am not unreliable."}, {"v": 1, "t": "I am slightly unreliable a lot of the time."}, {"v": 2, "t": "I am moderately unreliable a lot of the time."}, {"v": 3, "t": "I am considerably unreliable a lot of the time."}, {"v": 4, "t": "I am completely unreliable a lot of the time."}], "note": null, "displayNum": 19}, {"id": "PPSAggression9hardholdbackknockout", "factor": "ANT", "statements": [{"v": 0, "t": "I don’t find it hard to hold myself back from knocking some people out."}, {"v": 1, "t": "I find it slightly hard to hold myself back from knocking some people out."}, {"v": 2, "t": "I find it moderately hard to hold myself back from knocking some people out."}, {"v": 3, "t": "I find it considerably hard to hold myself back from knocking some people out."}, {"v": 4, "t": "I find it completely hard to hold myself back from knocking some people out."}], "note": null, "displayNum": 20}, {"id": "PPSInterpersonal10sellicetoeskimo", "factor": "INT", "statements": [{"v": 0, "t": "I’m not someone who could “sell ice to an Eskimo.”"}, {"v": 1, "t": "To a slight extent, I am someone who could “sell ice to an Eskimo.”"}, {"v": 2, "t": "To a moderate extent, I am someone who could “sell ice to an Eskimo.”"}, {"v": 3, "t": "To a considerable extent, I am someone who could “sell ice to an Eskimo.”"}, {"v": 4, "t": "To a complete extent, I am someone who could “sell ice to an Eskimo.”"}], "note": null, "displayNum": 21}, {"id": "PPSAffective10welfareregisters", "factor": "AFF", "statements": [{"v": 0, "t": "Other people’s welfare doesn’t fail to register for me emotionally."}, {"v": 1, "t": "To a slight extent, other people’s welfare fails to register for me emotionally."}, {"v": 2, "t": "To a moderate extent, other people’s welfare fails to register for me emotionally."}, {"v": 3, "t": "To a considerable extent, other people’s welfare fails to register for me emotionally."}, {"v": 4, "t": "To a complete extent, other people’s welfare fails to register for me emotionally."}], "note": null, "displayNum": 22}, {"id": "PPSLifestyle10planahead", "factor": "LIF", "statements": [{"v": 0, "t": "I bother to plan ahead."}, {"v": 1, "t": "To a slight extent, I don’t bother to plan ahead."}, {"v": 2, "t": "To a moderate extent, I don’t bother to plan ahead."}, {"v": 3, "t": "To a considerable extent, I don’t bother to plan ahead."}, {"v": 4, "t": "To a complete extent, I don’t bother to plan ahead."}], "note": null, "displayNum": 23}, {"id": "PPSAggression10usedaggressionplace", "factor": "ANT", "statements": [{"v": 0, "t": "To no extent have I used aggression to put someone back in their place."}, {"v": 1, "t": "To a slight extent, I have used aggression to put someone back in their place."}, {"v": 2, "t": "To a moderate extent, I have used aggression to put someone back in their place."}, {"v": 3, "t": "To a considerable extent, I have used aggression to put someone back in their place."}, {"v": 4, "t": "To a complete extent, I have used aggression to put someone back in their place."}], "note": null, "displayNum": 24}, {"id": "PPSInterpersonal12getothersdowant", "factor": "INT", "statements": [{"v": 0, "t": "I can’t get others to do what I want without them even realizing."}, {"v": 1, "t": "To a slight extent, I can get others to do what I want without them even realizing."}, {"v": 2, "t": "To a moderate extent, I can get others to do what I want without them even realizing."}, {"v": 3, "t": "To a considerable extent, I can get others to do what I want without them even realizing."}, {"v": 4, "t": "To a complete extent, I can get others to do what I want without them even realizing."}], "note": null, "displayNum": 25}, {"id": "PPSLifestyle15NEWrashdecisions", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t make rash decisions that I might regret later."}, {"v": 1, "t": "I make slightly rash decisions that I might regret later."}, {"v": 2, "t": "I make moderately rash decisions that I might regret later."}, {"v": 3, "t": "I make considerably rash decisions that I might regret later."}, {"v": 4, "t": "I make completely rash decisions that I might regret later."}], "note": null, "displayNum": 26}, {"id": "PPSAffective9lackremorse", "factor": "AFF", "statements": [{"v": 0, "t": "I don’t lack remorse."}, {"v": 1, "t": "I lack remorse to a slight extent."}, {"v": 2, "t": "I lack remorse to a moderate extent."}, {"v": 3, "t": "I lack remorse to a considerable extent."}, {"v": 4, "t": "I lack remorse to a complete extent."}], "note": null, "displayNum": 27}, {"id": "PPSAggression12NEWdestroypropertyrage", "factor": "ANT", "statements": [{"v": 0, "t": "I have never destroyed property in moments of rage."}, {"v": 1, "t": "To a slight extent, I have destroyed property in moments of rage."}, {"v": 2, "t": "To a moderate extent, I have destroyed property in moments of rage."}, {"v": 3, "t": "To a considerable extent, I have destroyed property in moments of rage."}, {"v": 4, "t": "To a complete extent, I have destroyed property in moments of rage."}], "note": null, "displayNum": 28}, {"id": "PPSInterpersonal14cheekygetaway", "factor": "INT", "statements": [{"v": 0, "t": "I have no cheeky ability to get away with things that others can’t get away with."}, {"v": 1, "t": "To a slight extent, I have a cheeky ability to get away with things that others can’t."}, {"v": 2, "t": "To a moderate extent, I have a cheeky ability to get away with things that others can’t."}, {"v": 3, "t": "To a considerable extent, I have a cheeky ability to get away with things that others can’t."}, {"v": 4, "t": "To a complete extent, I have a cheeky ability to get away with things that others can’t."}], "note": null, "displayNum": 29}, {"id": "PPSLifestyle11NEWdisregardobligations2others", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t disregard my obligations to others."}, {"v": 1, "t": "I slightly disregard my obligations to others."}, {"v": 2, "t": "I moderately disregard my obligations to others."}, {"v": 3, "t": "I considerably disregard my obligations to others."}, {"v": 4, "t": "I completely disregard my obligations to others."}], "note": null, "displayNum": 30}, {"id": "PPSAggression11enragedwhenblocked", "factor": "ANT", "statements": [{"v": 0, "t": "I don’t become enraged when people try to block me from doing what I want."}, {"v": 1, "t": "I become slightly enraged when people try to block me from doing what I want."}, {"v": 2, "t": "I become moderately enraged when people try to block me from doing what I want."}, {"v": 3, "t": "I become considerably enraged when people try to block me from doing what I want."}, {"v": 4, "t": "I become completely enraged when people try to block me from doing what I want."}], "note": null, "displayNum": 31}, {"id": "PPSInterpersonal4NEWwinningsmile", "factor": "INT", "statements": [{"v": 0, "t": "I can’t hide ulterior motives with a winning smile."}, {"v": 1, "t": "To a slight extent, I can hide ulterior motives with a winning smile."}, {"v": 2, "t": "To a moderate extent, I can hide ulterior motives with a winning smile."}, {"v": 3, "t": "To a considerable extent, I can hide ulterior motives with a winning smile."}, {"v": 4, "t": "To a complete extent, I can hide ulterior motives with a winning smile."}], "note": null, "displayNum": 32}, {"id": "PPSLifestyle18NEWcrazythingsforfun", "factor": "LIF", "statements": [{"v": 0, "t": "I’m not willing to do crazy things for fun if it might cause problems later."}, {"v": 1, "t": "I’m slightly willing to do crazy things for fun, even if it might cause problems later."}, {"v": 2, "t": "I’m moderately willing to do crazy things for fun, even if it might cause problems later."}, {"v": 3, "t": "I’m considerably willing to do crazy things for fun, even if it might cause problems later."}, {"v": 4, "t": "I’m completely willing to do crazy things for fun, even if it might cause problems later."}], "note": null, "displayNum": 33}, {"id": "PPSInterpersonal15outclassandoutsmart", "factor": "INT", "statements": [{"v": 0, "t": "I don’t outsmart and outclass other people with ease."}, {"v": 1, "t": "To a slight extent, I outsmart and outclass other people with ease."}, {"v": 2, "t": "To a moderate extent, I outsmart and outclass other people with ease."}, {"v": 3, "t": "To a considerable extent, I outsmart and outclass other people with ease."}, {"v": 4, "t": "To a complete extent, I outsmart and outclass other people with ease."}], "note": null, "displayNum": 34}, {"id": "PPSLifestyle19lackofplans", "factor": "LIF", "statements": [{"v": 0, "t": "I am committed to my long-term goals and plans for my future."}, {"v": 1, "t": "To a slight extent, I fail to commit to long-term goals and plans for my future."}, {"v": 2, "t": "To a moderate extent, I fail to commit to long-term goals and plans for my future."}, {"v": 3, "t": "To a considerable extent, I fail to commit to long-term goals and plans for my future."}, {"v": 4, "t": "To a complete extent, I fail to commit to long-term goals and plans for my future."}], "note": null, "displayNum": 35}];
-var DILEMMAS=[{"id": "MORAL1", "title": "A Murder Puzzle - Part 1", "scenario": "Dr. Tess Lee is an excellent surgeon. Every organ she transplants works.\n\nRight now, she has five patients who each need an organ. Two need a lung, two need a kidney, and one needs a heart. If they do not get the organs today, all five will die.\n\nTime is almost up when a young backpacker comes to the hospital for a routine check-up. He is healthy and has exactly the right blood type. If Dr. Lee uses his organs, the five patients will live.\n\nIs it morally permissible for Dr. Lee to kill the backpacker and use his organs to save the five patients?", "options": ["No, it's not morally okay for Dr. Tess to operate.", "Yes, it's morally okay for Dr. Tess to operate."]}, {"id": "MORAL2", "title": "A Murder Puzzle - Part 2", "scenario": "This is the same situation as before, with one key difference:\nIn this case, it turns out that Dr. Tess has actually poisoned the five patients on purpose. She did this because the patients had named her in their wills, so she would inherit their money if they died.\n\nNow she regrets what she did. She can save the five patients, but only by killing the backpacker and using his organs. If she does nothing, then by the end of the day she will have murdered the five patients. If she operates, she will have only murdered one patient instead of five.\n\nDo these facts make it morally permissible for Dr. Tess to kill the backpacker and use his organs to save the five patients?", "options": ["No, it's not morally okay for Dr. Tess to operate.", "Yes, it's morally okay for Dr. Tess to operate."]}, {"id": "MORAL3", "title": "A Sticky Situation - The Final dilemma", "scenario": "You live in an apartment block. Every day, the teenagers that live upstairs stomp, scream, and make loud noise late into the night.\n\nFor the past year, you have asked their parents many times to control their kids and keep the noise down. But the parents ignore you every time. They just do not care.\n\nYou have a big exam tomorrow morning. This test will decide your future career. If you do not sleep well tonight, you will fail the exam. If you do sleep well, you will ace the exam.\n\nYou discover that the family is going out to dinner tonight. If you put superglue in their locks while they are out, it will dry up and they will not be able to get back in. They will have to sleep somewhere else tonight. There is no guarantee they will be able find a place to stay, and might end up having to sleep on the street.\n\nHowever, their absence will ensure you get a good night’s sleep and ace the exam. \n\nIs it morally permissible for you to fill their door locks with superglue while they are out?", "options": ["No, it's not morally okay to fill the neighbors' locks with superglue while they are out.", "Yes, it's morally okay to fill the neighbors' locks with superglue while they are out."]}];
-var TRIPM_ITEMS=[{"id":"MEAN5sensitivetofeelings","factor":"Meanness","text":"I am sensitive to the feelings of others."},{"id":"DIS1problemsatwork","factor":"Disinhibition","text":"I have had problems at work because I was irresponsible."},{"id":"BOLD1bornleader","factor":"Boldness","text":"I'm a born leader."},{"id":"MEAN2notmuchsympathy","factor":"Meanness","text":"I don't have much sympathy for people."},{"id":"BOLD2convincepeople","factor":"Boldness","text":"I can convince people to do what I want."},{"id":"DIS2lostafriendirresponsible","factor":"Disinhibition","text":"I have lost a friend because of irresponsible things I've done."},{"id":"MEAN3seesomeoneinpain","factor":"Meanness","text":"It doesn’t bother me to see someone else in pain."},{"id":"BOLD4functionwell","factor":"Boldness","text":"I function well in new situations, even when unprepared."},{"id":"DIS3lackofselfcontrol","factor":"Disinhibition","text":"Others have told me they are concerned about my lack of self-control."},{"id":"MEAN4sympathisewithothers","factor":"Meanness","text":"I sympathize with others’ problems."},{"id":"BOLD5dontliketotakelead","factor":"Boldness","text":"I don’t like to take the lead in groups."},{"id":"DIS4jumpintothings","factor":"Disinhibition","text":"I jump into things without thinking."},{"id":"MEAN1nopointinworryingabouthurt","factor":"Meanness","text":"I don't see any point in worrying if what I do hurts someone else."},{"id":"VALID1birthtoahorse","factor":"Validity","text":"I have never given birth to an adult horse."},{"id":"BOLD6notgoodatinfluencing","factor":"Boldness","text":"I am not very good at influencing people."},{"id":"DIS5impulsivedecisionslovedones","factor":"Disinhibition","text":"My impulsive decisions have caused problems with loved ones."}];
-var SRP_ITEMS=[{"id":"SRPLife1rebellious","factor":"Lifestyle","text":"I’m a rebellious person."},{"id":"SRPAntisocialGangActivity","factor":"Antisocial","text":"I have never been involved in delinquent gang activity."},{"id":"SRPCallous1pplarewimps","factor":"Callous","text":"Most people are wimps."},{"id":"SOCPOT1hardlycenterattention","factor":"Social Potency","text":"I am hardly ever the center of attention."},{"id":"SRPLife2dangerousforthrill","factor":"Lifestyle","text":"I’ve often done something dangerous just for the thrill of it."},{"id":"SRPAntisocial1trickedgivingmoney","factor":"Antisocial","text":"I have tricked someone into giving me money."},{"id":"SOCPOT2gettingppltotalktome","factor":"Social Potency","text":"I have a talent for getting people to talk to me."},{"id":"VALID2grandmaheroin","factor":"Validity","text":"My grandma sells the finest heroin."},{"id":"SRPAntisocial2assaultsocialworker","factor":"Antisocial","text":"I have assaulted a law enforcement official or social worker."},{"id":"SRPInterpersonal1Pretendedtobesomeone","factor":"Interpersonal","text":"I have pretended to be someone else in order to get something."},{"id":"SRPCallous2Liketoseefights","factor":"Callous","text":"I like to see fist-fights."},{"id":"SOCPOT3doesmostofthetalking","factor":"Social Potency","text":"In conversations, I’m the one who does most of the talking."},{"id":"SRPInterpersonal2kickoutofscamming","factor":"Interpersonal","text":"I would get a kick out of ‘scamming’ someone."},{"id":"SRPInterpersonal3funtopushpeople","factor":"Interpersonal","text":"It's fun to see how far you can push people before they get upset."},{"id":"SRPLife3wildthings","factor":"Lifestyle","text":"I enjoy doing wild things."},{"id":"SRPAntisocial3brokenintobuildings","factor":"Antisocial","text":"I have broken into a building or vehicle in order to steal something or vandalize."},{"id":"SOCPOT4feelsureofmyself","factor":"Social Potency","text":"I feel sure of myself when I'm around other people."},{"id":"SRPCallous3dontbothertocontactfamily","factor":"Callous","text":"I don’t bother to keep in touch with my family any more."},{"id":"SRPlife4rarelyfollowrules","factor":"Lifestyle","text":"I rarely follow the rules."},{"id":"SRPInterpersonal4takeadvantageofothers","factor":"Interpersonal","text":"You should take advantage of other people before they do it to you."},{"id":"VALID4urinatingintoilets","factor":"Validity","text":"I believe it should be illegal to urinate in toilets."},{"id":"SOCPOT5standoutinacrowd","factor":"Social Potency","text":"I like to stand out in a crowd."},{"id":"SRPcallous4coldhearted","factor":"Callous","text":"People sometimes say that I’m cold-hearted."},{"id":"SRPlife5sexwithpeople","factor":"Lifestyle","text":"I like to have sex with people I barely know."},{"id":"SRPcallous5violentsportsandmovies","factor":"Callous","text":"I love violent sports and movies."},{"id":"SRPInterpersonal5pretendtolikesomeone","factor":"Interpersonal","text":"Sometimes you have to pretend you like people to get something out of them."},{"id":"SRPantisocial4convictedofseriouscrime","factor":"Antisocial","text":"I was convicted of a serious crime."},{"id":"SOCPOT6gouptostranger","factor":"Social Potency","text":"It’s easy for me to go up to a stranger and introduce myself."},{"id":"SRPlife6keepgettingintrouble","factor":"Lifestyle","text":"I keep getting in trouble for the same things over and over."},{"id":"SRPantisocial5knifeorgun","factor":"Antisocial","text":"Every now and then I carry a weapon (knife or gun) for protection."},{"id":"SRPInterpersonal6tellingpeoplewhattheywant","factor":"Interpersonal","text":"You can get what you want by telling people what they want to hear."},{"id":"SRPcallous6neverfeelguilty","factor":"Callous","text":"I never feel guilty over hurting others."},{"id":"SOCPOT7lifeoftheparty","factor":"Social Potency","text":"I'm hardly ever the \"life of the party.\""},{"id":"SRPantisocial6threatenedpeople","factor":"Antisocial","text":"I have threatened people into giving me money, clothes, or makeup."},{"id":"SRPinterpersonal7peoplearesuckers","factor":"Interpersonal","text":"A lot of people are “suckers” and can easily be fooled."},{"id":"SRPlife7oftenmouthoff","factor":"Lifestyle","text":"I admit that I often “mouth off” without thinking."},{"id":"SRPcallous7dumpfriends","factor":"Callous","text":"I sometimes dump friends that I don’t need any more."},{"id":"SRPantisocialhiwithvehicle","factor":"Antisocial","text":"I purposely tried to hit someone with the vehicle I was driving."},{"id":"VALID3zanzibar","factor":"Validity","text":"I am a close, personal friend of the Prime Minister of Zanzibar."}];
-var SINS_DATA={"id": "SINS1", "title": "Single Item Narcissism Scale (SINS)", "attribution": "S. Konrath et al. (2014)", "prompt": "To what extent do you agree with this statement:", "statement": "“I am a narcissist.”", "note": "Note: The word “narcissist” means egotistical, self-focused, and vain.", "leftLabel": "Not very true of me", "rightLabel": "Very True of me", "points": 7};
-var TRIPM_ANCHORS=["False", "Somewhat False", "Somewhat True", "True"];
-var SRP_ANCHORS=["Strongly Disagree", "Disagree", "Neither Agree Nor Disagree", "Agree", "Strongly Agree"];
+const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbzWSWPf6hQHjsOtV4BG8EwulXQhnucBNK_6saXB914B1ZZrarsvBAPdeiHesToDxhKpjg/exec';
+// PPS: each item has 5 first-person statements in display order.
+// Each statement is {v: score 0-4, t: text}. Scoring uses .v, never the display index.
+var S1_ITEMS=[{"id": "PPSInterpersonal1manipulationnaturally", "factor": "INT", "statements": [{"v": 0, "t": "Manipulation does not come naturally to me."}, {"v": 1, "t": "Manipulation comes slightly naturally to me."}, {"v": 2, "t": "Manipulation comes moderately naturally to me."}, {"v": 3, "t": "Manipulation comes considerably naturally to me."}, {"v": 4, "t": "Manipulation comes completely naturally to me."}], "note": null, "displayNum": 0}, {"id": "PPSAffective1coldunemotional", "factor": "AFF", "statements": [{"v": 0, "t": "I am not a cold and unemotional person."}, {"v": 1, "t": "I am a slightly cold and unemotional person."}, {"v": 2, "t": "I am a moderately cold and unemotional person."}, {"v": 3, "t": "I am a considerably cold and unemotional person."}, {"v": 4, "t": "I am a completely cold and unemotional person."}], "note": null, "displayNum": 1}, {"id": "PPSLifestyle1disregardtasks", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t disregard tasks I’m expected to take care of."}, {"v": 1, "t": "I slightly disregard tasks I’m expected to take care of."}, {"v": 2, "t": "I moderately disregard tasks I’m expected to take care of."}, {"v": 3, "t": "I considerably disregard tasks I’m expected to take care of."}, {"v": 4, "t": "I completely disregard tasks I’m expected to take care of."}], "note": null, "displayNum": 2}, {"id": "PPSInterpersonal2likeandtrust", "factor": "INT", "statements": [{"v": 0, "t": "I cannot get people to like me and trust me when they shouldn’t."}, {"v": 1, "t": "To a slight extent, I can get people to like me and trust me when they shouldn’t."}, {"v": 2, "t": "To a moderate extent, I can get people to like me and trust me when they shouldn’t."}, {"v": 3, "t": "To a considerable extent, I can get people to like me and trust me when they shouldn’t."}, {"v": 4, "t": "To a complete extent, I can get people to like me and trust me when they shouldn’t."}], "note": null, "displayNum": 3}, {"id": "PPSAffective2lackremorse", "factor": "AFF", "statements": [{"v": 0, "t": "I don’t lack remorse."}, {"v": 1, "t": "I lack remorse to a slight extent."}, {"v": 2, "t": "I lack remorse to a moderate extent."}, {"v": 3, "t": "I lack remorse to a considerable extent."}, {"v": 4, "t": "I lack remorse to a complete extent."}], "note": null, "displayNum": 4}, {"id": "PPSLifestyle2rashdecisions", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t make rash decisions that I might regret later."}, {"v": 1, "t": "I make slightly rash decisions that I might regret later."}, {"v": 2, "t": "I make moderately rash decisions that I might regret later."}, {"v": 3, "t": "I make considerably rash decisions that I might regret later."}, {"v": 4, "t": "I make completely rash decisions that I might regret later."}], "note": null, "displayNum": 5}, {"id": "PPSInterpersonal3bullshitartist", "factor": "INT", "statements": [{"v": 0, "t": "I’m not a good bullshit artist."}, {"v": 1, "t": "I’m a slightly good bullshit artist."}, {"v": 2, "t": "I’m a moderately good bullshit artist."}, {"v": 3, "t": "I’m a considerably good bullshit artist."}, {"v": 4, "t": "I’m an extremely good bullshit artist."}], "note": null, "displayNum": 6}, {"id": "PPSAffective3friendpain", "factor": "AFF", "statements": [{"v": 0, "t": "I feel affected by a friend’s emotional pain."}, {"v": 1, "t": "I feel slightly unaffected by a friend’s emotional pain."}, {"v": 2, "t": "I feel moderately unaffected by a friend’s emotional pain."}, {"v": 3, "t": "I feel considerably unaffected by a friend’s emotional pain."}, {"v": 4, "t": "I feel completely unaffected by a friend’s emotional pain."}], "note": null, "displayNum": 7}, {"id": "PPSLifestyle3irresponsibly", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t behave irresponsibly."}, {"v": 1, "t": "I behave slightly irresponsibly."}, {"v": 2, "t": "I behave moderately irresponsibly."}, {"v": 3, "t": "I behave considerably irresponsibly."}, {"v": 4, "t": "I behave completely irresponsibly."}], "note": null, "displayNum": 8}, {"id": "PPSInterpersonal4charmonandoff", "factor": "INT", "statements": [{"v": 0, "t": "I can’t turn my charm on and off like a tap."}, {"v": 1, "t": "To a slight extent, I can turn my charm on and off like a tap."}, {"v": 2, "t": "To a moderate extent, I can turn my charm on and off like a tap."}, {"v": 3, "t": "To a considerable extent, I can turn my charm on and off like a tap."}, {"v": 4, "t": "To a complete extent, I can turn my charm on and off like a tap."}], "note": null, "displayNum": 9}, {"id": "PPSLifestyle4disregardconsequences", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t disregard possible consequences."}, {"v": 1, "t": "I slightly disregard possible consequences."}, {"v": 2, "t": "I moderately disregard possible consequences."}, {"v": 3, "t": "I considerably disregard possible consequences."}, {"v": 4, "t": "I completely disregard possible consequences."}], "note": null, "displayNum": 10}, {"id": "PPSAffective4shallowfeelings", "factor": "AFF", "statements": [{"v": 0, "t": "I don’t have shallow feelings or lack emotional depth."}, {"v": 1, "t": "To a slight extent, I have shallow feelings and lack emotional depth."}, {"v": 2, "t": "To a moderate extent, I have shallow feelings and lack emotional depth."}, {"v": 3, "t": "To a considerable extent, I have shallow feelings and lack emotional depth."}, {"v": 4, "t": "To a complete extent, I have shallow feelings and lack emotional depth."}], "note": null, "displayNum": 11}, {"id": "PPSLifestyle5payownway", "factor": "LIF", "statements": [{"v": 0, "t": "I make sure I pay my own way and do not let others foot the bill."}, {"v": 1, "t": "To a slight extent, I fail to pay my own way and let others foot the bill."}, {"v": 2, "t": "To a moderate extent, I fail to pay my own way and let others foot the bill."}, {"v": 3, "t": "To a considerable extent, I fail to pay my own way and let others foot the bill."}, {"v": 4, "t": "To a complete extent, I fail to pay my own way and let others foot the bill."}], "note": null, "displayNum": 12}, {"id": "PPSInterpersonal5falsepersona", "factor": "INT", "statements": [{"v": 0, "t": "I cannot adopt a false persona to con others."}, {"v": 1, "t": "I can adopt a slightly false persona to con others."}, {"v": 2, "t": "I can adopt a moderately false persona to con others."}, {"v": 3, "t": "I can adopt a considerably false persona to con others."}, {"v": 4, "t": "I can adopt a completely false persona to con others."}], "note": null, "displayNum": 13}, {"id": "PPSAffective5guiltfree", "factor": "AFF", "statements": [{"v": 0, "t": "When I do something wrong, I feel guilt."}, {"v": 1, "t": "When I do something wrong, I feel slightly guilt free."}, {"v": 2, "t": "When I do something wrong, I feel moderately guilt free."}, {"v": 3, "t": "When I do something wrong, I feel considerably guilt free."}, {"v": 4, "t": "When I do something wrong, I feel completely guilt free."}], "note": null, "displayNum": 14}, {"id": "PPSInterpersonal6talkmyway", "factor": "INT", "statements": [{"v": 0, "t": "I can’t talk my way past almost any person."}, {"v": 1, "t": "To a slight extent, I can talk my way past almost any person."}, {"v": 2, "t": "To a moderate extent, I can talk my way past almost any person."}, {"v": 3, "t": "To a considerable extent, I can talk my way past almost any person."}, {"v": 4, "t": "To a complete extent, I can talk my way past almost any person."}], "note": null, "displayNum": 15}, {"id": "PPSLifestyle6immediatepleasures", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t chase immediate pleasures at the expense of long-term stability."}, {"v": 1, "t": "I chase immediate pleasures to a slight extent, even at the expense of long-term stability."}, {"v": 2, "t": "I chase immediate pleasures to a moderate extent, even at the expense of long-term stability."}, {"v": 3, "t": "I chase immediate pleasures to a considerable extent, even at the expense of long-term stability."}, {"v": 4, "t": "I chase immediate pleasures to a complete extent, even at the expense of long-term stability."}], "note": null, "displayNum": 16}, {"id": "PPSAffective6welfareregisters", "factor": "AFF", "statements": [{"v": 0, "t": "Other people’s welfare doesn’t fail to register for me emotionally."}, {"v": 1, "t": "To a slight extent, other people’s welfare fails to register for me emotionally."}, {"v": 2, "t": "To a moderate extent, other people’s welfare fails to register for me emotionally."}, {"v": 3, "t": "To a considerable extent, other people’s welfare fails to register for me emotionally."}, {"v": 4, "t": "To a complete extent, other people’s welfare fails to register for me emotionally."}], "note": null, "displayNum": 17}, {"id": "PPSLifestyle7unreliable", "factor": "LIF", "statements": [{"v": 0, "t": "I am not unreliable."}, {"v": 1, "t": "I am slightly unreliable a lot of the time."}, {"v": 2, "t": "I am moderately unreliable a lot of the time."}, {"v": 3, "t": "I am considerably unreliable a lot of the time."}, {"v": 4, "t": "I am completely unreliable a lot of the time."}], "note": null, "displayNum": 18}, {"id": "PPSInterpersonal7outsmartoutclass", "factor": "INT", "statements": [{"v": 0, "t": "I don’t outsmart and outclass other people with ease."}, {"v": 1, "t": "To a slight extent, I outsmart and outclass other people with ease."}, {"v": 2, "t": "To a moderate extent, I outsmart and outclass other people with ease."}, {"v": 3, "t": "To a considerable extent, I outsmart and outclass other people with ease."}, {"v": 4, "t": "To a complete extent, I outsmart and outclass other people with ease."}], "note": null, "displayNum": 19}, {"id": "PPSAffective7notsorry", "factor": "AFF", "statements": [{"v": 0, "t": "I genuinely feel sorry for the things that I have done."}, {"v": 1, "t": "To a slight extent, I’m not sorry for the things I’ve done."}, {"v": 2, "t": "To a moderate extent, I’m not sorry for the things I’ve done."}, {"v": 3, "t": "To a considerable extent, I’m not sorry for the things I’ve done."}, {"v": 4, "t": "To a complete extent, I’m not sorry for the things I’ve done."}], "note": null, "displayNum": 20}, {"id": "PPSInterpersonal8getothersdowant", "factor": "INT", "statements": [{"v": 0, "t": "I can’t get others to do what I want without them even realizing."}, {"v": 1, "t": "To a slight extent, I can get others to do what I want without them even realizing."}, {"v": 2, "t": "To a moderate extent, I can get others to do what I want without them even realizing."}, {"v": 3, "t": "To a considerable extent, I can get others to do what I want without them even realizing."}, {"v": 4, "t": "To a complete extent, I can get others to do what I want without them even realizing."}], "note": null, "displayNum": 21}, {"id": "PPSLifestyle8disregardobligations", "factor": "LIF", "statements": [{"v": 0, "t": "I don’t disregard my obligations to others."}, {"v": 1, "t": "I slightly disregard my obligations to others."}, {"v": 2, "t": "I moderately disregard my obligations to others."}, {"v": 3, "t": "I considerably disregard my obligations to others."}, {"v": 4, "t": "I completely disregard my obligations to others."}], "note": null, "displayNum": 22}, {"id": "PPSInterpersonal9winningsmile", "factor": "INT", "statements": [{"v": 0, "t": "I can’t hide ulterior motives with a winning smile."}, {"v": 1, "t": "To a slight extent, I can hide ulterior motives with a winning smile."}, {"v": 2, "t": "To a moderate extent, I can hide ulterior motives with a winning smile."}, {"v": 3, "t": "To a considerable extent, I can hide ulterior motives with a winning smile."}, {"v": 4, "t": "To a complete extent, I can hide ulterior motives with a winning smile."}], "note": null, "displayNum": 23}, {"id": "PPSAffective8lackempathy", "factor": "AFF", "statements": [{"v": 0, "t": "I have no lack of empathy."}, {"v": 1, "t": "I have a slight lack of empathy."}, {"v": 2, "t": "I have a moderate lack of empathy."}, {"v": 3, "t": "I have a considerable lack of empathy."}, {"v": 4, "t": "I have a complete lack of empathy."}], "note": null, "displayNum": 24}, {"id": "PPSLifestyle9longtermgoals", "factor": "LIF", "statements": [{"v": 0, "t": "I am committed to my long-term goals and plans for my future."}, {"v": 1, "t": "To a slight extent, I fail to commit to long-term goals and plans for my future."}, {"v": 2, "t": "To a moderate extent, I fail to commit to long-term goals and plans for my future."}, {"v": 3, "t": "To a considerable extent, I fail to commit to long-term goals and plans for my future."}, {"v": 4, "t": "To a complete extent, I fail to commit to long-term goals and plans for my future."}], "note": null, "displayNum": 25}, {"id": "PPSInterpersonal10cheekygetaway", "factor": "INT", "statements": [{"v": 0, "t": "I have no cheeky ability to get away with things that others can’t get away with."}, {"v": 1, "t": "To a slight extent, I have a cheeky ability to get away with things that others can’t."}, {"v": 2, "t": "To a moderate extent, I have a cheeky ability to get away with things that others can’t."}, {"v": 3, "t": "To a considerable extent, I have a cheeky ability to get away with things that others can’t."}, {"v": 4, "t": "To a complete extent, I have a cheeky ability to get away with things that others can’t."}], "note": null, "displayNum": 26}, {"id": "PPSAffective9personalresponsibility", "factor": "AFF", "statements": [{"v": 0, "t": "I feel personally responsible if my actions have hurt others."}, {"v": 1, "t": "I feel a slight lack of personal responsibility if my actions have hurt others."}, {"v": 2, "t": "I feel a moderate lack of personal responsibility if my actions have hurt others."}, {"v": 3, "t": "I feel a considerable lack of personal responsibility if my actions have hurt others."}, {"v": 4, "t": "I feel a complete lack of personal responsibility if my actions have hurt others."}], "note": null, "displayNum": 27}];
+var DILEMMAS=[{"id": "MORAL1", "title": "Scenario 1", "scenario": "Dr. Tess Lee is an excellent surgeon. Every organ she transplants works.\n\nRight now, she has five patients who each need an organ. Two need a lung, two need a kidney, and one needs a heart. If they do not get the organs today, all five will die.\n\nTime is almost up when a young backpacker comes to the hospital for a routine check-up. He is healthy and has exactly the right blood type. If Dr. Lee uses his organs, the five patients will live.\n\nIs it morally permissible for Dr. Lee to kill the backpacker and use his organs to save the five patients?", "options": ["No, Dr. Tess should not operate.", "Yes, Dr. Tess should operate."]}, {"id": "MORAL2", "title": "Scenario 2", "scenario": "This is the same situation as before, with one key difference:\nDr. Tess is informed that earlier that morning, the backpacker was driving recklessly and crashed into a car that had the five patients in it. The backpacker was unharmed, but the crash directly caused the severe trauma and organ failure that the five patients are now being treated for.\n\nIf the doctor kills the driver and harvests his organs, the five innocent victims will live. If the doctor does nothing, the driver will walk away unharmed, and his five victims will die.", "options": ["No, Dr. Tess should not operate.", "Yes, Dr. Tess should operate."]}, {"id": "MORAL3", "title": "Scenario 3", "scenario": "In this scenario, Dr. Tess has poisoned the five patients on purpose earlier in the day. She did this because the patients had named her in their wills, so she would inherit their money if they died.\n\nNow she regrets what she did, but she cannot stop the poison from killing them, as there is no antidote. The only way to save the five patients now is to kill an innocent backpacker and use his organs. If she does nothing, then by the end of the day she will have murdered five innocent patients. If she operates, she will have only murdered one innocent patient instead of five.", "options": ["No, Dr. Tess should not operate.", "Yes, Dr. Tess should operate."]}];
+// NPI-16 (forced choice). Response stored as 0 = A, 1 = B; 'key' = narcissistic option (Ames et al., 2006).
+var NPI_ITEMS=[{"id": "NPI1", "a": "When people compliment me I sometimes get embarrassed.", "b": "I know that I am good because everybody keeps telling me so.", "key": "B"}, {"id": "NPI2", "a": "I prefer to blend in with the crowd.", "b": "I like to be the center of attention.", "key": "B"}, {"id": "NPI3", "a": "I am no better or worse than most people.", "b": "I think I am a special person.", "key": "B"}, {"id": "NPI4", "a": "I like to have authority over other people.", "b": "I don’t mind following orders.", "key": "A"}, {"id": "NPI5", "a": "I find it easy to manipulate people.", "b": "I don’t like it when I find myself manipulating people.", "key": "A"}, {"id": "NPI6", "a": "I insist upon getting the respect that is due me.", "b": "I usually get the respect that I deserve.", "key": "A"}, {"id": "NPI7", "a": "I try not to be a show off.", "b": "I will usually show off if I get the chance.", "key": "B"}, {"id": "NPI8", "a": "I always know what I am doing.", "b": "Sometimes I am not sure of what I am doing.", "key": "A"}, {"id": "NPI9", "a": "Sometimes I tell good stories.", "b": "Everybody likes to hear my stories.", "key": "B"}, {"id": "NPI10", "a": "I expect a great deal from other people.", "b": "I like to do things for other people.", "key": "A"}, {"id": "NPI11", "a": "I really like to be the center of attention.", "b": "It makes me uncomfortable to be the center of attention.", "key": "A"}, {"id": "NPI12", "a": "Being an authority doesn’t mean that much to me.", "b": "People always seem to recognize my authority.", "key": "B"}, {"id": "NPI13", "a": "I am going to be a great person.", "b": "I hope I am going to be successful.", "key": "A"}, {"id": "NPI14", "a": "People sometimes believe what I tell them.", "b": "I can make anybody believe anything I want them to.", "key": "B"}, {"id": "NPI15", "a": "I am more capable than other people.", "b": "There is a lot that I can learn from other people.", "key": "A"}, {"id": "NPI16", "a": "I am much like everybody else.", "b": "I am an extraordinary person.", "key": "B"}];
+var NPI_INSTRUCTION_INTRO="On the next screen there will be two statements.";
+var NPI_INSTRUCTION_POINTS=["Choose the statement that comes closest to describing your feelings and beliefs about yourself.","You may feel that both, or neither statement describes you well, but pick the one that comes closest compared to the other."];
+// LSRP (36 items + 1 validity item). Recorded 1–4 (1 = Disagree Strongly, 4 = Agree Strongly). No reverse-scoring applied.
+var LSRP_ITEMS=[{"id": "LSRPCallous1Feelbademotionalpain", "factor": "Callous", "text": "I feel bad if my words or actions cause someone else to feel emotional pain.", "order": 1}, {"id": "LSRPEgocentric1Justifiedanything", "factor": "Egocentric", "text": "In today’s world, I feel justified in doing anything I can get away with to succeed.", "order": 1}, {"id": "LSRPAntisocial1Dontfollowrules", "factor": "Antisocial", "text": "I know rules are there, but I don’t tend to follow them.", "order": 1}, {"id": "LSRPCallous2Nothurtothers", "factor": "Callous", "text": "I make a point of trying not to hurt others in pursuit of my goals.", "order": 2}, {"id": "LSRPEgocentric2Survivaloffittest", "factor": "Egocentric", "text": "Success is based on survival of the fittest; I am not concerned about the losers.", "order": 2}, {"id": "LSRPAntisocial2Oftenbored", "factor": "Antisocial", "text": "I am often bored.", "order": 2}, {"id": "LSRPEgocentric3Enjoymanipulating", "factor": "Egocentric", "text": "I enjoy manipulating other people’s feelings.", "order": 3}, {"id": "LSRPCallous3Emotionalatfunerals", "factor": "Callous", "text": "People are too emotional at funerals.", "order": 3}, {"id": "LSRPAntisocial3Sametrouble", "factor": "Antisocial", "text": "I find myself in the same kinds of trouble, time after time.", "order": 3}, {"id": "LSRPEgocentric4Moneymostimportant", "factor": "Egocentric", "text": "Making a lot of money is my most important goal.", "order": 4}, {"id": "LSRPCallous4Upsetothersexpense", "factor": "Callous", "text": "I would be upset if my success came at someone else’s expense.", "order": 4}, {"id": "LSRPAntisocial4Beforethinking", "factor": "Antisocial", "text": "I often do things before thinking them through.", "order": 4}, {"id": "LSRPEgocentric5Tellwhattheywanttohear", "factor": "Egocentric", "text": "I tell other people what they want to hear so that they will do what I want them to do.", "order": 5}, {"id": "LSRPCallous5Cheatingnotjustifiable", "factor": "Callous", "text": "Cheating is not justifiable because it is unfair to others.", "order": 5}, {"id": "LSRPAntisocial5Shoutingmatches", "factor": "Antisocial", "text": "I have been in a lot of shouting matches with other people.", "order": 5}, {"id": "LSRPEgocentric6Whatsrightgetaway", "factor": "Egocentric", "text": "For me, what’s right is whatever I can get away with.", "order": 6}, {"id": "LSRPCallous6Crysadmovies", "factor": "Callous", "text": "I tend to cry in sad movies.", "order": 6}, {"id": "LSRPAntisocial6Planningthingsout", "factor": "Antisocial", "text": "I like planning things out.", "order": 6}, {"id": "LSRPEgocentric7Rippedoffdeserveit", "factor": "Egocentric", "text": "People who are stupid enough to get ripped off usually deserve it.", "order": 7}, {"id": "LSRPAntisocial7Troubledoesntbother", "factor": "Antisocial", "text": "Getting into trouble doesn’t bother me.", "order": 7}, {"id": "LSRPCallous7Notthinkfeelings", "factor": "Callous", "text": "I tend not to think about other people’s feelings.", "order": 7}, {"id": "LSRPEgocentric8Lookingoutformyself", "factor": "Egocentric", "text": "Looking out for myself is my top priority.", "order": 8}, {"id": "LSRPAntisocial8Blowingtop", "factor": "Antisocial", "text": "When I get frustrated, I often “let off steam” by blowing my top.", "order": 8}, {"id": "LSRPCallous8Wouldntlie", "factor": "Callous", "text": "Even if I were trying very hard to sell something, I wouldn’t lie about it.", "order": 8}, {"id": "LSRPAntisocial9Cantkeepoutoftrouble", "factor": "Antisocial", "text": "I usually can’t keep out of trouble for too long.", "order": 9}, {"id": "LSRPEgocentric9Admirecleverscam", "factor": "Egocentric", "text": "I often admire a really clever scam.", "order": 9}, {"id": "LSRPCallous9Feelbaddowrong", "factor": "Callous", "text": "I feel bad when I do something wrong.", "order": 9}, {"id": "LSRPAntisocial10Loseinterest", "factor": "Antisocial", "text": "I quickly lose interest in tasks I start.", "order": 10}, {"id": "VALIDADULTHORSE", "factor": "Validity", "text": "I have given birth to a full grown adult horse.", "order": 1}, {"id": "LSRPEgocentric10Goodies", "factor": "Egocentric", "text": "My main purpose in life is getting as many goodies as I can.", "order": 10}, {"id": "LSRPCallous10Feelsadmyself", "factor": "Callous", "text": "When people are sad around me, I feel sad myself.", "order": 10}, {"id": "LSRPAntisocial11Considerconsequences", "factor": "Antisocial", "text": "Before I do anything, I carefully consider the possible consequences.", "order": 11}, {"id": "LSRPEgocentric11Bottomline", "factor": "Egocentric", "text": "I let others worry about higher values; my main concern is with the bottom line.", "order": 11}, {"id": "LSRPCallous11Warmperson", "factor": "Callous", "text": "My friends consider me a warm person.", "order": 11}, {"id": "LSRPAntisocial12Rebel", "factor": "Antisocial", "text": "I am a bit of a rebel.", "order": 12}, {"id": "LSRPCallous12Notemotional", "factor": "Callous", "text": "I’m not a very emotional person.", "order": 12}, {"id": "LSRPAntisocial13Dontplanahead", "factor": "Antisocial", "text": "I don’t plan anything very far in advance.", "order": 13}];
+var LSRP_ANCHORS=["Disagree Strongly", "Disagree Somewhat", "Agree Somewhat", "Agree Strongly"];
 var PPS_INSTRUCTION_MAIN="Pick the statement that best describes how you have been most of the time, in most situations during the last 5 years.";
 var SURVEY_TITLE="A Murder Puzzle";
 // === Redirect target: change this URL to your Reddit post before publishing ===
@@ -635,24 +623,27 @@ var REDDIT_URL="https://www.reddit.com/r/SampleSize/";
 // ===================== CONTROLLER =====================
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-// Build the ordered screen list (interleaved dilemmas + 3 scales)
+// Build the ordered screen list:
+// Dilemma 1 -> NPI-16 -> Dilemma 2 -> PPS -> Dilemma 3 -> LSRP
 var SCREENS=[];
 SCREENS.push({type:'welcome'});
 SCREENS.push({type:'dilemma',d:DILEMMAS[0],section:0});
-TRIPM_ITEMS.forEach(function(it){SCREENS.push({type:'likert',item:it,anchors:TRIPM_ANCHORS,section:0});});
+SCREENS.push({type:'instructions',text:NPI_INSTRUCTION_INTRO,points:NPI_INSTRUCTION_POINTS,section:0});
+NPI_ITEMS.forEach(function(it){SCREENS.push({type:'npi',item:it,auto:true,section:0});});
 SCREENS.push({type:'dilemma',d:DILEMMAS[1],section:1});
-SRP_ITEMS.forEach(function(it){SCREENS.push({type:'likert',item:it,anchors:SRP_ANCHORS,section:1});});
+S1_ITEMS.forEach(function(it){SCREENS.push({type:'pps',item:it,section:1});});
 SCREENS.push({type:'dilemma',d:DILEMMAS[2],section:2});
-S1_ITEMS.forEach(function(it){SCREENS.push({type:'pps',item:it,section:2});});
-SCREENS.push({type:'sins'});
+LSRP_ITEMS.forEach(function(it){SCREENS.push({type:'likert',item:it,anchors:LSRP_ANCHORS,base:1,auto:true,section:2});});
 SCREENS.push({type:'demographics'});
 SCREENS.push({type:'thankyou'});
 
+var QUESTION_TYPES={dilemma:1,likert:1,pps:1,npi:1};
 var ANSWERABLE=[];
-SCREENS.forEach(function(s,i){if(s.type==='dilemma'||s.type==='likert'||s.type==='pps'||s.type==='sins')ANSWERABLE.push(i);});
+SCREENS.forEach(function(s,i){if(QUESTION_TYPES[s.type])ANSWERABLE.push(i);});
 var SECTIONS=[[],[],[]];
-SCREENS.forEach(function(s,i){if((s.type==='dilemma'||s.type==='likert'||s.type==='pps')&&typeof s.section==='number')SECTIONS[s.section].push(i);});
+SCREENS.forEach(function(s,i){if((QUESTION_TYPES[s.type]||s.type==='instructions')&&typeof s.section==='number')SECTIONS[s.section].push(i);});
 var FIRST_PPS=-1;for(var fp=0;fp<SCREENS.length;fp++){if(SCREENS[fp].type==='pps'){FIRST_PPS=fp;break;}}
+var FIRST_NPI=-1;for(var fn=0;fn<SCREENS.length;fn++){if(SCREENS[fn].type==='npi'){FIRST_NPI=fn;break;}}
 var THANKYOU_INDEX=SCREENS.length-1;
 var DEMO_INDEX=-1;for(var di=0;di<SCREENS.length;di++){if(SCREENS[di].type==='demographics'){DEMO_INDEX=di;break;}}
 var LAST_ANSWERABLE=ANSWERABLE.length?ANSWERABLE[ANSWERABLE.length-1]:-1;
@@ -663,20 +654,164 @@ function answerablePct(idx){
   return Math.round(((pos+1)/ANSWERABLE.length)*100);
 }
 
-var VPN_KEYWORDS=['vpn','nord','express','surfshark','cyberghost','private internet','mullvad','proton','pia ','windscribe','tunnelbear','ivpn','hide.me','hotspot shield','ipvanish','purevpn','torguard','astrill','vypr','zenmate','strongvpn','datacenter','hosting','cloud','server','hetzner','digitalocean','ovh','amazon','aws','linode','vultr','choopa','m247','datacamp','psychz','leaseweb','quadranet','cogent','zscaler'];
+// Matched (case-insensitive) against every ISP / organisation / ASN name the IP services return.
+// Kept specific on purpose so ordinary home and mobile ISPs are not flagged.
+var VPN_KEYWORDS=[
+  // Consumer VPN brands and their parent companies
+  'vpn','nordvpn','nordsec','tefincom','expressvpn','express vpn','surfshark','cyberghost','private internet access','kape technologies',
+  'mullvad','amagicom','protonvpn','proton ag','proton technologies','windscribe','tunnelbear','ivpn','hide.me','eventure','hotspot shield',
+  'anchorfree','pango','ipvanish','purevpn','gz systems','torguard','astrill','vyprvpn','golden frog','zenmate','strongvpn','privatevpn',
+  'airvpn','ovpn','perfect privacy','trust.zone','cactusvpn','ivacy','fastestvpn','atlas vpn','turbo vpn','x-vpn','hidemyass','privax',
+  'privado','urban vpn','hola vpn','hola networks','luminati','bright data','betternet','psiphon','lantern','browsec','vpn unlimited','keepsolid','safervpn',
+  'f-secure','freedome','avast','norton secure','mcafee','bitdefender','kaspersky','opera software','packethub','datacamp','cdn77',
+  'tzulo','gsl networks','clouvider','creanova','hostroyale','performive','zenlayer','xtom','datapacket','private layer','ipxo',
+  // Privacy relays / proxies / anonymisers
+  'icloud private relay','private relay','cloudflare','zscaler','netskope','tor exit','torservers','anonymous','proxy','relay',
+  // Hosting, cloud and datacentre networks (residential users are not normally on these)
+  'datacenter','data center','datacentre','hosting','server','colocation','dedicated server','vps','cloud','amazon','aws','google llc','google cloud',
+  'microsoft','azure','oracle','alibaba','tencent','huawei cloud','digitalocean','linode','akamai','vultr','choopa','constant company',
+  'ovh','hetzner','scaleway','online s.a.s','contabo','upcloud','kamatera','leaseweb','m247','psychz','quadranet','colocrossing',
+  'hostwinds','servermania','buyvm','frantech','ponynet','hostinger','ionos','godaddy','namecheap','dreamhost','rackspace','softlayer',
+  'ibm cloud','fastly','g-core','gcore','hurricane electric','cogent','servers.com','i3d','worldstream','serverius','nforce','hostkey',
+  'aeza','stark industries','pq hosting','hostpapa','interserver','sharktech','ramnode','racknerd','greencloud','bluehost'
+];
 var SUBMIT_SECRET='pps_8Kv3nQ7xW2mP';
 function generateToken(rid){var s=SUBMIT_SECRET+':'+rid;var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return 'tk_'+Math.abs(h).toString(36)}
 
-var state={currentPage:0,responses:{},demoYN:{accurate:null,consent:null},demoFields:{age:'',gender:'',country:''},startTime:null,endTime:null,pageStartTimes:[],pageTimes:[],respondentId:'R'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),ipData:{},slideDir:'fwd'};
+var state={currentPage:0,responses:{},demoYN:{accurate:null,consent:null},demoFields:{age:'',gender:'',country:''},startTime:null,endTime:null,pausedMs:0,pauseStart:null,homeMs:0,npiInstrMs:0,pageStartTimes:[],pageTimes:[],respondentId:'R'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),ipData:{},slideDir:'fwd'};
 
-(function(){
-  fetch('https://ipapi.co/json/')
-    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})
-    .then(function(d){var org=(d.org||'').toLowerCase();state.ipData={ip:d.ip||'',country:d.country_name||'',region:d.region||'',city:d.city||'',isp:d.org||'',is_vpn:VPN_KEYWORDS.some(function(kw){return org.indexOf(kw)!==-1})}})
-    .catch(function(){
-      fetch('https://api.ipapi.is/').then(function(r){return r.json()}).then(function(d){state.ipData={ip:d.ip||'',country:(d.location&&d.location.country)||'',region:(d.location&&d.location.state)||'',city:(d.location&&d.location.city)||'',isp:(d.company&&d.company.name)||'',is_vpn:d.is_vpn||d.is_proxy||d.is_datacenter||d.is_tor||false}}).catch(function(){state.ipData={ip:'unavailable',is_vpn:false}});
-    });
-})();
+// ---- IP lookup + VPN / proxy detection ----
+// Several free services are queried in parallel; results are merged so one blocked or
+// rate-limited service never leaves the IP blank. VPN status = any provider flag,
+// any VPN/hosting keyword in the ISP/organisation names, or a browser-vs-IP timezone mismatch.
+function fetchJSON(url,ms){
+  return new Promise(function(resolve,reject){
+    var done=false,ctrl=null;
+    try{ctrl=new AbortController();}catch(e){}
+    var t=setTimeout(function(){if(!done){done=true;try{ctrl&&ctrl.abort();}catch(e){}reject(new Error('timeout'));}},ms||6000);
+    fetch(url,ctrl?{signal:ctrl.signal,cache:'no-store'}:{cache:'no-store'})
+      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+      .then(function(d){if(done)return;done=true;clearTimeout(t);resolve(d);})
+      .catch(function(e){if(done)return;done=true;clearTimeout(t);reject(e);});
+  });
+}
+function validIP(ip){return typeof ip==='string'&&/^([0-9]{1,3}\.){3}[0-9]{1,3}$|^[0-9a-fA-F:]+:[0-9a-fA-F:]*$/.test(ip.trim());}
+// Each provider returns a normalised record, or throws if the reply is unusable (e.g. a rate-limit message)
+// Optional: paste a free ipapi.is API key here (sign up at ipapi.is, 1,000 lookups/day) to get its
+// VPN / proxy / Tor / datacentre flags. Without a key the survey still logs IPs and uses the other checks.
+var IPAPI_IS_KEY='';
+var IP_PROVIDERS=[
+  {name:'ipapi.is',url:'https://api.ipapi.is/'+(IPAPI_IS_KEY?'?key='+encodeURIComponent(IPAPI_IS_KEY):''),parse:function(d){
+    if(!d||!validIP(d.ip))throw new Error('bad');
+    var flags=[];['is_vpn','is_proxy','is_tor','is_datacenter'].forEach(function(k){if(d[k]===true)flags.push(k.replace('is_',''));});
+    if(d.egress_service)flags.push('egress service: '+(d.egress_service.service||d.egress_service.name||d.egress_service.type||'private relay'));
+    if(d.vpn&&d.vpn.service)flags.push('vpn service: '+d.vpn.service);
+    if(d.company&&d.company.type==='hosting')flags.push('hosting company');
+    if(d.asn&&d.asn.type==='hosting')flags.push('hosting ASN');
+    return {ip:d.ip,country:(d.location&&d.location.country)||'',region:(d.location&&d.location.state)||'',city:(d.location&&d.location.city)||'',
+      isp:(d.company&&d.company.name)||(d.asn&&d.asn.org)||'',orgs:[d.company&&d.company.name,d.asn&&d.asn.org,d.asn&&d.asn.descr,d.datacenter&&d.datacenter.datacenter],
+      tz:(d.location&&d.location.timezone)||'',flags:flags};
+  }},
+  {name:'ipapi.co',url:'https://ipapi.co/json/',parse:function(d){
+    if(!d||d.error||!validIP(d.ip))throw new Error('bad');
+    return {ip:d.ip,country:d.country_name||'',region:d.region||'',city:d.city||'',isp:d.org||'',orgs:[d.org,d.asn],tz:d.timezone||'',flags:[]};
+  }},
+  {name:'ipwho.is',url:'https://ipwho.is/',parse:function(d){
+    if(!d||d.success===false||!validIP(d.ip))throw new Error('bad');
+    var c=d.connection||{},sec=d.security||{},flags=[];
+    ['vpn','proxy','tor','hosting','relay','anonymous'].forEach(function(k){if(sec[k]===true)flags.push(k);});
+    return {ip:d.ip,country:d.country||'',region:d.region||'',city:d.city||'',isp:c.isp||c.org||'',orgs:[c.isp,c.org,c.domain],tz:(d.timezone&&d.timezone.id)||'',flags:flags};
+  }},
+  {name:'freeipapi',url:'https://free.freeipapi.com/api/json',parse:function(d){
+    if(!d||!validIP(d.ipAddress))throw new Error('bad');
+    var flags=[];if(d.isProxy===true)flags.push('proxy');
+    var tz=Array.isArray(d.timeZones)?d.timeZones[0]:(d.timeZone||'');
+    return {ip:d.ipAddress,country:d.countryName||'',region:d.regionName||'',city:d.cityName||'',isp:d.asnOrganization||'',orgs:[d.asnOrganization],tz:/\//.test(tz)?tz:'',flags:flags};
+  }},
+  {name:'geojs',url:'https://get.geojs.io/v1/ip/geo.json',parse:function(d){
+    if(!d||!validIP(d.ip))throw new Error('bad');
+    return {ip:d.ip,country:d.country||'',region:d.region||'',city:d.city||'',isp:d.organization_name||'',orgs:[d.organization_name,d.organization],tz:d.timezone||'',flags:[]};
+  }},
+  {name:'ipify',url:'https://api64.ipify.org?format=json',parse:function(d){
+    if(!d||!validIP(d.ip))throw new Error('bad');
+    return {ip:d.ip,country:'',region:'',city:'',isp:'',orgs:[],tz:'',flags:[]};
+  }}
+];
+// UTC offset (minutes) of an IANA timezone right now, or null if the browser can't tell
+function tzOffsetMinutes(tz){
+  try{
+    var parts=new Intl.DateTimeFormat('en-US',{timeZone:tz,timeZoneName:'longOffset'}).formatToParts(new Date());
+    var n=(parts.filter(function(x){return x.type==='timeZoneName';})[0]||{}).value||'';
+    if(n==='GMT')return 0;
+    var m=n.match(/GMT([+-])(\d{1,2}):?(\d{2})?/);if(!m)return null;
+    return (m[1]==='-'?-1:1)*(parseInt(m[2],10)*60+parseInt(m[3]||'0',10));
+  }catch(e){return null;}
+}
+function lookupIP(){
+  return Promise.all(IP_PROVIDERS.map(function(pr){
+    return fetchJSON(pr.url,6000).then(function(d){var r=pr.parse(d);r.src=pr.name;return r;}).catch(function(){return null;});
+  })).then(function(res){
+    var ok=res.filter(Boolean);
+    if(!ok.length){state.ipData={ip:'unavailable',country:'',city:'',isp:'',is_vpn:false,signals:'IP lookup failed (all services blocked or offline)'};return;}
+    // Prefer the first provider (in list order) that has full location data
+    var main=ok.filter(function(r){return r.country;})[0]||ok[0];
+    var signals=[];
+    ok.forEach(function(r){r.flags.forEach(function(f){signals.push(r.src+': '+f);});});
+    // Keyword match across every ISP / org / ASN name returned
+    var names=[];ok.forEach(function(r){(r.orgs||[]).concat([r.isp]).forEach(function(n){if(n&&typeof n==='string'&&names.indexOf(n)===-1)names.push(n);});});
+    var hits=[];names.forEach(function(n){var low=n.toLowerCase();VPN_KEYWORDS.forEach(function(kw){if(low.indexOf(kw)!==-1&&hits.indexOf(kw)===-1)hits.push(kw);});});
+    if(hits.length)signals.push('network name matches: '+hits.join(', ')+' ('+names.join(' | ')+')');
+    // Browser timezone vs IP-location timezone
+    var browserTz='';try{browserTz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';}catch(e){}
+    var browserOff=-new Date().getTimezoneOffset();
+    var ipTz=(ok.filter(function(r){return r.tz;})[0]||{}).tz||'';
+    // Only counted when the two timezones are in different regions (e.g. Australia vs Europe), because
+    // mobile IPs are often placed in the wrong city/state within the same country.
+    var region=function(z){return (z||'').indexOf('/')>0?z.split('/')[0]:'';};
+    if(ipTz&&region(browserTz)&&region(ipTz)&&region(browserTz)!==region(ipTz)){var ipOff=tzOffsetMinutes(ipTz);if(ipOff!==null&&Math.abs(ipOff-browserOff)>=60)signals.push('timezone mismatch: device '+(browserTz||('UTC'+(browserOff>=0?'+':'')+browserOff/60))+' vs IP '+ipTz);}
+    state.ipData={ip:main.ip,country:main.country,region:main.region,city:main.city,isp:main.isp||((ok.filter(function(r){return r.isp;})[0]||{}).isp)||'',
+      is_vpn:signals.length>0,signals:signals.join('; ')};
+  });
+}
+state.ipPromise=lookupIP();
+
+// ---- Survey clock ----
+// StartDate = when "Begin" is pressed. The clock stops on the details page; if the participant
+// goes back from there it resumes (time spent paused on the details page is not counted), and
+// stops again when they return. EndDate = the last time they reached the details page.
+// Formats a timestamp as Los Angeles local time (PST/PDT, daylight saving handled) "YYYY-MM-DD HH:MM:SS"
+function fmtLA(ms){
+  if(!ms)return '';
+  try{
+    var parts={};new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'})
+      .formatToParts(new Date(ms)).forEach(function(x){parts[x.type]=x.value;});
+    var hh=parts.hour==='24'?'00':parts.hour;
+    if(parts.year&&parts.month&&parts.day&&hh)return parts.year+'-'+parts.month+'-'+parts.day+' '+hh+':'+parts.minute+':'+parts.second;
+  }catch(e){}
+  // Fallback if the browser lacks timezone data: US rules — PDT (UTC-7) from 2nd Sunday of March 2am to 1st Sunday of November 2am, else PST (UTC-8)
+  var y=new Date(ms).getUTCFullYear();
+  function nthSunday(month,n){var d=new Date(Date.UTC(y,month,1));var first=(7-d.getUTCDay())%7;return Date.UTC(y,month,1+first+7*(n-1));}
+  var dstStart=nthSunday(2,2)+10*3600*1000, dstEnd=nthSunday(10,1)+9*3600*1000; // 2am PST = 10:00 UTC; 2am PDT = 09:00 UTC
+  var off=(ms>=dstStart&&ms<dstEnd)?-7:-8;
+  return new Date(ms+off*3600*1000).toISOString().slice(0,19).replace('T',' ');
+}
+// Reading-time measures (seconds, 1 decimal), used as an attention / data-quality proxy:
+//   homescreentime     = time on the welcome screen, from page load until "Begin" is pressed
+//   NPIinstructiontime = time on the NPI instructions page
+// Only counts while the tab is visible (a link opened in a background tab doesn't inflate it).
+// If the participant comes back to either screen, the extra time is added.
+var READ_TIMERS={welcome:'homeMs',instructions:'npiInstrMs'};
+var readKey=null,readStart=null;
+function readTimerStop(){if(readKey&&readStart!==null){state[readKey]=(state[readKey]||0)+(Date.now()-readStart);}readKey=null;readStart=null;}
+function readTimerStart(){
+  readTimerStop();
+  var sc=SCREENS[state.currentPage];var key=sc&&READ_TIMERS[sc.type];
+  if(key&&document.visibilityState!=='hidden'){readKey=key;readStart=Date.now();}
+}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')readTimerStop();else readTimerStart();});
+
+function clockArriveDetails(){var now=Date.now();state.endTime=now;state.pauseStart=now;}
+function clockLeaveDetails(){if(state.pauseStart){state.pausedMs=(state.pausedMs||0)+(Date.now()-state.pauseStart);}state.pauseStart=null;state.endTime=null;}
 
 function slideClass(){return state.slideDir==='bwd'?'slide-bwd':'slide-fwd';}
 function progressBar(idx){
@@ -699,17 +834,29 @@ function render(){
   else if(s.type==='dilemma')html=renderDilemma(s.d);
   else if(s.type==='likert')html=renderLikert(s);
   else if(s.type==='pps')html=renderPPSItem(s.item);
-  else if(s.type==='sins')html=renderSINS();
+  else if(s.type==='npi')html=renderNPIItem(s.item);
+  else if(s.type==='instructions')html=renderInstructions(s);
   else if(s.type==='demographics')html=renderDemographics();
   else if(s.type==='thankyou')html=renderThankYou();
+  readTimerStart(); // stops any running reading timer, starts one if this is the welcome / instructions screen
   app.innerHTML=html;attachListeners();
   if(s.type==='pps')setTimeout(unifyStmtWrap,0);
+  if(s.type==='pps')setTimeout(fitPPSInstruction,0);
   if(s.type==='thankyou'){clearProgress();setTimeout(function(){window.location.href=REDDIT_URL;},1000);}
   // Start each new screen at the top, but never re-snap afterwards — a delayed
   // reset would fight the user while they scroll toward the answers/button.
   window.scrollTo(0,0);
   saveProgress();
 }
+
+function fitPPSInstruction(){
+  var pin=document.getElementById('ppsInstrPin');if(!pin)return;
+  pin.classList.remove('in-flow');
+  var hdr=document.querySelector('.progress-container');
+  var limit=hdr?hdr.getBoundingClientRect().bottom+8:8;
+  if(pin.getBoundingClientRect().top<limit)pin.classList.add('in-flow');
+}
+window.addEventListener('resize',function(){var s=SCREENS[state.currentPage];if(s&&s.type==='pps')fitPPSInstruction();});
 
 function renderWelcome(){
   return '<div class="hero">'
@@ -751,11 +898,12 @@ function renderDilemma(d){
 }
 
 function renderLikert(s){
-  var item=s.item,anchors=s.anchors,sel=state.responses[item.id];
+  var item=s.item,anchors=s.anchors,base=s.base||0,sel=state.responses[item.id];
   var btns='';
   anchors.forEach(function(lbl,i){
-    var c=(sel===i)?' selected':'';
-    btns+='<div class="scale-btn'+c+'" data-item="'+item.id+'" data-value="'+i+'" role="button" tabindex="0" aria-pressed="'+(sel===i?'true':'false')+'"><span class="scale-lbl">'+esc(lbl)+'</span></div>';
+    var v=base+i;
+    var c=(sel===v)?' selected':'';
+    btns+='<div class="scale-btn'+c+'" data-item="'+item.id+'" data-value="'+v+'" role="button" tabindex="0" aria-pressed="'+(sel===v?'true':'false')+'"><span class="scale-lbl">'+esc(lbl)+'</span></div>';
   });
   var html='<div class="survey-shell">';
   html+=progressBar(state.currentPage);
@@ -783,34 +931,40 @@ function renderPPSItem(item){
   var html='<div class="survey-shell">';
   html+=progressBar(state.currentPage);
   html+='<div class="item-area '+slideClass()+'"><div class="item-center">';
-  html+='<div class="item-float-top"><div class="error-msg" id="itemError">Please choose a statement before continuing.</div>'+instrHtml+noteHtml+'</div>';
-  html+='<div class="stmt-stack">'+cards+'</div>';
+  html+='<div class="item-float-top"><div class="error-msg" id="itemError">Please choose a statement before continuing.</div>'+noteHtml+'</div>';
+  // Instruction is pinned above the options (out of flow) so the first item's options sit in the same place as every other item
+  html+='<div class="stmt-anchor">'+(instrHtml?'<div class="pps-instr-pin" id="ppsInstrPin">'+instrHtml+'</div>':'')+'<div class="stmt-stack">'+cards+'</div></div>';
   html+='</div></div>';
   html+=navRow();
   html+='</div>';
   return html;
 }
 
-function renderSINS(){
-  var sel=state.responses['SINS1'];
+function renderNPIItem(item){
+  // Forced choice: stored as 0 = A, 1 = B
+  var sel=state.responses[item.id];
   var btns='';
-  for(var v=1;v<=7;v++){
-    var c=(sel===v)?' selected':'';
-    var endlbl=(v===1)?SINS_DATA.leftLabel:((v===7)?SINS_DATA.rightLabel:'');
-    btns+='<div class="sins-btn'+c+'" data-item="SINS1" data-value="'+v+'" role="button" tabindex="0" aria-pressed="'+(sel===v?'true':'false')+'">'
-      +'<span class="sins-num">'+v+'</span>'
-      +(endlbl?'<span class="sins-end">'+esc(endlbl)+'</span>':'')
-      +'</div>';
-  }
+  [item.a,item.b].forEach(function(txt,i){
+    var c=(sel===i)?' selected':'';
+    btns+='<div class="scale-btn'+c+'" data-item="'+item.id+'" data-value="'+i+'" role="button" tabindex="0" aria-pressed="'+(sel===i?'true':'false')+'"><span class="scale-lbl">'+esc(txt)+'</span></div>';
+  });
   var html='<div class="survey-shell">';
-  html+='<div class="item-area '+slideClass()+'"><div class="item-center sins-inner">';
-  html+='<div class="sins-title">'+esc(SINS_DATA.title)+'</div>';
-  html+='<div class="sins-attrib">'+esc(SINS_DATA.attribution)+'</div>';
-  html+='<div class="sins-prompt">'+esc(SINS_DATA.prompt)+'</div>';
-  html+='<div class="sins-statement">'+esc(SINS_DATA.statement)+'</div>';
-  html+='<div class="sins-note">'+esc(SINS_DATA.note)+'</div>';
-  html+='<div class="error-msg" id="itemError">Please choose an option before continuing.</div>';
-  html+='<div class="sins-row">'+btns+'</div>';
+  html+=progressBar(state.currentPage);
+  html+='<div class="item-area '+slideClass()+'"><div class="item-center">';
+  html+='<div class="item-float-top"><div class="error-msg" id="itemError">Please choose a statement before continuing.</div></div>';
+  html+='<div class="item-anchor"><div class="scale-wrap likert npi-wrap">'+btns+'</div></div>';
+  html+='</div></div>';
+  html+=navRow();
+  html+='</div>';
+  return html;
+}
+
+function renderInstructions(s){
+  var html='<div class="survey-shell">';
+  html+=progressBar(state.currentPage);
+  html+='<div class="item-area '+slideClass()+'"><div class="item-center">';
+  var pts='';(s.points||[]).forEach(function(t){pts+='<li>'+esc(t)+'</li>';});
+  html+='<div class="instr-plain"><p class="instr-text">'+esc(s.text)+'</p>'+(pts?'<ul class="instr-list">'+pts+'</ul>':'')+'</div>';
   html+='</div></div>';
   html+=navRow();
   html+='</div>';
@@ -835,6 +989,7 @@ function renderDemographics(){
   html+='<div class="demo-field"><label>Were your answers accurate?</label><div class="yn-row">'+ynBtn('accurate','YES')+ynBtn('accurate','NO')+'</div></div>';
   html+='<div class="demo-field"><label>Do you consent to your responses being used for this study?</label><div class="yn-row">'+ynBtn('consent','YES')+ynBtn('consent','NO')+'</div></div>';
   html+='<button class="demo-submit" id="btnDemoSubmit">Submit</button>';
+  html+='<button type="button" class="demo-back" id="btnBack">Back</button>';
   html+='</div></div>';
   return html;
 }
@@ -884,13 +1039,13 @@ function unifyStmtWrap(){
 window.addEventListener('resize',function(){var s=SCREENS[state.currentPage];if(s&&s.type==='pps')unifyStmtWrap();});
 
 // ---- Navigation ----
-function recordPageTime(){var st=state.pageStartTimes[state.currentPage];if(st)state.pageTimes[state.currentPage]=Math.round((Date.now()-st)/100)/10;state.pageStartTimes[state.currentPage]=Date.now();}
+// Per-item time accumulates across visits (going back to an item adds to its time rather than replacing it)
+function recordPageTime(){var st=state.pageStartTimes[state.currentPage];if(st)state.pageTimes[state.currentPage]=Math.round(((state.pageTimes[state.currentPage]||0)+(Date.now()-st)/1000)*10)/10;state.pageStartTimes[state.currentPage]=Date.now();}
 function showItemError(msg){var err=document.getElementById('itemError');if(err){err.textContent=msg;err.classList.add('visible');}}
 
 function currentResponseId(s){
   if(s.type==='dilemma')return s.d.id;
-  if(s.type==='likert'||s.type==='pps')return s.item.id;
-  if(s.type==='sins')return 'SINS1';
+  if(s.type==='likert'||s.type==='pps'||s.type==='npi')return s.item.id;
   return null;
 }
 
@@ -899,25 +1054,29 @@ function goNext(){
   var rid=currentResponseId(s);
   if(rid!==null && state.responses[rid]===undefined){
     if(s.type==='dilemma'){var dp=document.getElementById('dilemmaPrompt');if(dp)dp.classList.add('error-state');}
-    else showItemError(s.type==='pps'?'Please choose a statement before continuing.':'Please choose an option before continuing.');
+    else showItemError((s.type==='pps'||s.type==='npi')?'Please choose a statement before continuing.':'Please choose an option before continuing.');
     return;
   }
   if(!state.startTime)state.startTime=Date.now();
   recordPageTime();
-  if(idx===LAST_ANSWERABLE && !state.endTime)state.endTime=Date.now();
   state.slideDir='fwd';
   state.currentPage++;
+  if(state.currentPage===DEMO_INDEX)clockArriveDetails();
   state.pageStartTimes[state.currentPage]=Date.now();
   render();
 }
 function goBack(){
   if(state.currentPage<=0)return;
+  if(state.currentPage===DEMO_INDEX)clockLeaveDetails();
   recordPageTime();
   state.slideDir='bwd';
   state.currentPage--;
   state.pageStartTimes[state.currentPage]=Date.now();
   render();
 }
+
+// Auto-advance (NPI + LSRP): move to the next item immediately on selection
+function scheduleAdvance(){goNext();}
 
 function attachListeners(){
   var bs=document.getElementById('btnStart');
@@ -951,9 +1110,11 @@ function attachListeners(){
   });
 
   // selectable option cards / likert buttons
-  document.querySelectorAll('.scale-btn, .stmt-card, .sins-btn').forEach(function(opt){
+  document.querySelectorAll('.scale-btn, .stmt-card').forEach(function(opt){
     opt.addEventListener('click',function(){
       var itemId=opt.dataset.item,value=parseInt(opt.dataset.value);
+      var autoAdv=!!(SCREENS[state.currentPage]&&SCREENS[state.currentPage].auto);
+      if(state.responses[itemId]===value&&autoAdv){scheduleAdvance();return;}
       if(state.responses[itemId]===value){
         delete state.responses[itemId];
         opt.classList.remove('selected');
@@ -962,7 +1123,7 @@ function attachListeners(){
         return;
       }
       state.responses[itemId]=value;
-      document.querySelectorAll('.scale-btn[data-item="'+itemId+'"], .stmt-card[data-item="'+itemId+'"], .sins-btn[data-item="'+itemId+'"]').forEach(function(o){
+      document.querySelectorAll('.scale-btn[data-item="'+itemId+'"], .stmt-card[data-item="'+itemId+'"]').forEach(function(o){
         o.classList.remove('selected');
         if(o.hasAttribute('aria-pressed'))o.setAttribute('aria-pressed','false');
       });
@@ -972,6 +1133,7 @@ function attachListeners(){
       saveProgress();
       // Prevent mobile browser from auto-scrolling the selected element into view
       if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+      if(autoAdv)scheduleAdvance();
     });
     opt.addEventListener('keydown',function(e){
       if(e.key===' '){e.preventDefault();e.stopPropagation();opt.click();}
@@ -986,7 +1148,7 @@ function attachListeners(){
 // current question has not been answered. Back always works.
 (function(){
   var sx=0,sy=0,st=0,tracking=false;
-  var SWIPE_TYPES={dilemma:1,likert:1,pps:1,sins:1};
+  var SWIPE_TYPES={dilemma:1,likert:1,pps:1,npi:1,instructions:1};
   function canSwipe(){var s=SCREENS[state.currentPage];if(window.visualViewport&&window.visualViewport.scale>1.01)return false;return !!(s&&SWIPE_TYPES[s.type]);}
   document.addEventListener('touchstart',function(e){
     if(e.touches.length!==1){tracking=false;return;}
@@ -1020,16 +1182,21 @@ function submitToSheet(payload,callback){
 
 function buildPayload(demos){
   var p={};
-  p.timestamp=new Date().toISOString();
+  // Times are Los Angeles local time (PST/PDT)
+  p.StartDate=fmtLA(state.startTime);
+  p.EndDate=fmtLA(state.endTime);
   p.respondent_id=state.respondentId;
   p.section='complete';
-  var tt=(state.endTime&&state.startTime)?Math.round((state.endTime-state.startTime)/100)/10:0;
+  var tt=(state.endTime&&state.startTime)?Math.round((state.endTime-state.startTime-(state.pausedMs||0))/100)/10:0;
   p.total_time_seconds=tt;
+  p.homescreentime=Math.round((state.homeMs||0)/100)/10;
+  p.NPIinstructiontime=Math.round((state.npiInstrMs||0)/100)/10;
   p.ip_address=state.ipData.ip||'';
   p.ip_country=state.ipData.country||'';
   p.ip_city=state.ipData.city||'';
   p.isp=state.ipData.isp||'';
   p.is_vpn_or_proxy=state.ipData.is_vpn?'YES':'NO';
+  p.vpn_signals=state.ipData.signals||'';
   p.demo_age=demos&&demos.age!==undefined?demos.age:'';
   p.demo_gender=demos?demos.gender||'':'';
   p.demo_country=demos?demos.country||'':'';
@@ -1037,19 +1204,26 @@ function buildPayload(demos){
   p.demo_consent=demos?demos.consent||'':'';
   // Moral dilemmas (recorded option index 0/1)
   DILEMMAS.forEach(function(d){p[d.id]=state.responses[d.id]!==undefined?state.responses[d.id]:'';});
-  // Scale 1 (Triarchic) in test order
-  TRIPM_ITEMS.forEach(function(it){p[it.id]=state.responses[it.id]!==undefined?state.responses[it.id]:'';});
-  // Scale 2 (SRP) in test order
-  SRP_ITEMS.forEach(function(it){p[it.id]=state.responses[it.id]!==undefined?state.responses[it.id]:'';});
-  // Scale 3 (PPS) grouped by factor, test order within factor
-  ['INT','AFF','LIF','ANT'].forEach(function(f){
+  // Scale 1: NPI-16 (forced choice) — each item scored 1 = narcissistic response, 0 = non-narcissistic; total = sum (0-16)
+  var npiTotal=0,npiDone=0;
+  NPI_ITEMS.forEach(function(it){
+    var r=state.responses[it.id];
+    if(r===0||r===1){var letter=r===0?'A':'B';var sc=(letter===it.key)?1:0;p[it.id]=sc;npiDone++;npiTotal+=sc;}
+    else p[it.id]='';
+  });
+  p.NPI_total=(npiDone===NPI_ITEMS.length)?npiTotal:'';
+  // Scale 2: PPS grouped by factor, test order within factor (0-4)
+  ['INT','AFF','LIF'].forEach(function(f){
     S1_ITEMS.forEach(function(it){if(it.factor===f)p[it.id]=state.responses[it.id]!==undefined?state.responses[it.id]:'';});
   });
-  // Scale 4 (SINS), 1-7
-  p['SINS1']=state.responses['SINS1']!==undefined?state.responses['SINS1']:'';
+  // Scale 3: LSRP grouped by factor, numbered order within factor (1-4, raw — reverse-keyed items not recoded)
+  ['Egocentric','Callous','Antisocial','Validity'].forEach(function(f){
+    LSRP_ITEMS.filter(function(it){return it.factor===f;}).sort(function(a,b){return a.order-b.order;})
+      .forEach(function(it){p[it.id]=state.responses[it.id]!==undefined?state.responses[it.id]:'';});
+  });
   // Per-item time columns, in overall test order
   ANSWERABLE.forEach(function(si){
-    var s=SCREENS[si];var id=(s.type==='dilemma')?s.d.id:(s.type==='sins'?'SINS1':s.item.id);
+    var s=SCREENS[si];var id=(s.type==='dilemma')?s.d.id:s.item.id;
     p['Time'+id]=state.pageTimes[si]||0;
   });
   p.auth_token=generateToken(state.respondentId);
@@ -1082,13 +1256,20 @@ function submitFinal(){
   var overlay=document.getElementById('submitting');
   var spin=document.getElementById('spinnerText');if(spin)spin.textContent='Submitting your responses\u2026';
   if(overlay)overlay.classList.add('visible');
-  var payload=buildPayload({age:parseInt(age),gender:gender,country:country,accurate:accurate,consent:consent});
+  var demos={age:parseInt(age),gender:gender,country:country,accurate:accurate,consent:consent};
+  // Make sure the IP lookup has finished (max 8s) so the IP is never missing from the submission
+  var waited=false;
+  function go(){if(waited)return;waited=true;
+  var payload=buildPayload(demos);
   submitToSheet(payload,function(){
     if(overlay)overlay.classList.remove('visible');
     state.slideDir='fwd';
     state.currentPage=THANKYOU_INDEX;
     render();
   });
+  }
+  setTimeout(go,8000);
+  if(state.ipPromise&&state.ipPromise.then)state.ipPromise.then(go,go);else go();
 }
 
 // ---- Keyboard ----
@@ -1106,7 +1287,7 @@ document.addEventListener('keydown',function(e){
 
 // ---- Silent progress saving (survives reloads, app backgrounding, and iOS tab eviction) ----
 // Stored locally on this device only; cleared automatically once the survey is submitted.
-var SAVE_KEY='pps_progress_v1';
+var SAVE_KEY='pps_progress_v11';
 var SAVE_TTL=12*60*60*1000; // forget abandoned sessions after 12h
 function saveProgress(){
   try{
@@ -1116,7 +1297,7 @@ function saveProgress(){
     localStorage.setItem(SAVE_KEY,JSON.stringify({
       t:Date.now(), currentPage:state.currentPage, responses:state.responses,
       demoYN:state.demoYN, demoFields:state.demoFields, startTime:state.startTime,
-      endTime:state.endTime, pageTimes:state.pageTimes, pageStartTimes:state.pageStartTimes,
+      endTime:state.endTime, homeMs:state.homeMs, npiInstrMs:state.npiInstrMs, pausedMs:state.pausedMs, pauseStart:state.pauseStart, pageTimes:state.pageTimes, pageStartTimes:state.pageStartTimes,
       respondentId:state.respondentId
     }));
   }catch(e){}
@@ -1134,6 +1315,10 @@ function restoreProgress(){
     state.demoFields=b.demoFields||{age:'',gender:'',country:''};
     state.startTime=b.startTime||null;
     state.endTime=b.endTime||null;
+    state.pausedMs=b.pausedMs||0;
+    state.homeMs=b.homeMs||0;
+    state.npiInstrMs=b.npiInstrMs||0;
+    state.pauseStart=b.pauseStart||null;
     state.pageTimes=b.pageTimes||[];
     state.pageStartTimes=b.pageStartTimes||[];
     if(b.respondentId)state.respondentId=b.respondentId;
