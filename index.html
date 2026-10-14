@@ -464,6 +464,9 @@ body.on-results{}
 .thankyou-screen{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem;background:var(--bg);text-align:center}
 .thankyou-card{max-width:480px;animation:fadeIn .5s ease}
 .thankyou-card h1{font-family:var(--heading);font-size:2rem;font-weight:700;color:var(--text);margin:.4rem 0 .85rem;letter-spacing:-.02em}
+.thankyou-id{display:inline-flex;flex-direction:column;align-items:center;gap:.3rem;margin:0 auto 1.4rem;padding:.75rem 1.4rem;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.6);font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.thankyou-id span{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.15rem;font-weight:600;letter-spacing:.02em;text-transform:none;color:var(--text);user-select:all;-webkit-user-select:all}
+.thankyou-card p.thankyou-results{margin-bottom:1.2rem}
 .thankyou-card p{font-size:1.05rem;color:var(--text-muted);line-height:1.65;margin-bottom:2rem}
 .thankyou-check{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#22A822,#4ACA4A);color:#fff;font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;box-shadow:0 6px 24px rgba(34,168,34,.35)}
 .yn-row{display:flex;gap:.75rem;margin-top:.45rem}
@@ -842,7 +845,7 @@ function render(){
   app.innerHTML=html;attachListeners();
   if(s.type==='pps')setTimeout(unifyStmtWrap,0);
   if(s.type==='pps')setTimeout(fitPPSInstruction,0);
-  if(s.type==='thankyou'){clearProgress();setTimeout(function(){window.location.href=REDDIT_URL;},1000);}
+  if(s.type==='thankyou'){clearProgress();} // stays on the thank-you page (no automatic redirect)
   // Start each new screen at the top, but never re-snap afterwards — a delayed
   // reset would fight the user while they scroll toward the answers/button.
   window.scrollTo(0,0);
@@ -998,8 +1001,8 @@ function renderThankYou(){
   return '<div class="thankyou-screen"><div class="thankyou-card">'
     +'<div class="thankyou-check">\u2713</div>'
     +'<h1>Thank you for participating!</h1>'
-    +'<p>Please share your feedback \u2014 we\u2019d love to hear what you thought.</p>'
-    +'<button class="btn-hero" id="btnContinue">Continue</button>'
+    +'<p class="thankyou-results">If you would like your results, please copy your Respondent ID below and paste it as a comment on the Reddit post. We will send you a DM with your results.</p>'
+    +'<div class="thankyou-id">Your Respondent ID<span id="responseId">'+esc(state.respondentId)+'</span></div>'
     +'</div></div>';
 }
 
@@ -1087,8 +1090,6 @@ function attachListeners(){
   if(bb)bb.addEventListener('click',function(){goBack();});
   var bds=document.getElementById('btnDemoSubmit');
   if(bds)bds.addEventListener('click',function(){submitFinal();});
-  var bcont=document.getElementById('btnContinue');
-  if(bcont)bcont.addEventListener('click',function(){window.location.href=REDDIT_URL;});
 
   // demographics error clearing
   var demoAge=document.getElementById('demoAge');
